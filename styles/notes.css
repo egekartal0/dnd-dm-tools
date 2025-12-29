@@ -1,0 +1,118 @@
+/* Session Notes Styles */
+
+.notes-controls {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.notes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-md);
+}
+
+.note-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.note-card:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.note-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.note-card-title h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.note-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.note-category-badge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    border-radius: var(--radius-sm);
+}
+
+.note-category-badge.session {
+    background: rgba(111, 66, 193, 0.2);
+    color: var(--purple-light);
+}
+
+.note-category-badge.npc {
+    background: rgba(74, 158, 255, 0.2);
+    color: var(--player-color);
+}
+
+.note-category-badge.location {
+    background: rgba(40, 167, 69, 0.2);
+    color: var(--success);
+}
+
+.note-category-badge.plot {
+    background: rgba(255, 193, 7, 0.2);
+    color: var(--warning);
+}
+
+.note-category-badge.loot {
+    background: rgba(201, 162, 39, 0.2);
+    color: var(--gold);
+}
+
+.note-card-content {
+    padding: var(--space-md);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-height: 120px;
+    overflow: hidden;
+    position: relative;
+}
+
+.note-card-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, var(--bg-card));
+}
+
+#noteContent {
+    min-height: 250px;
+    font-family: var(--font-body);
+    line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+    .notes-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .notes-container {
+        grid-template-columns: 1fr;
+    }
+}

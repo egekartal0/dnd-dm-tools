@@ -1,0 +1,276 @@
+/* Shop Generator Styles */
+
+.shop-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-md);
+}
+
+.shop-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    align-items: center;
+    background: var(--surface-color);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--space-md);
+}
+
+.shop-controls select {
+    min-width: 150px;
+}
+
+/* Shop Card */
+.shop-card {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+    border-bottom: 1px solid var(--border-color);
+}
+
+.shop-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.shop-icon {
+    font-size: 2.5rem;
+}
+
+.shop-name {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--text-color);
+}
+
+.shop-type {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.shop-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.shop-owner {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--hover-color);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.shop-owner strong {
+    color: var(--text-color);
+}
+
+/* Inventory Table */
+.shop-inventory {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.inventory-header {
+    display: grid;
+    grid-template-columns: 2fr 80px 50px 40px;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--hover-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+}
+
+.inventory-item {
+    display: grid;
+    grid-template-columns: 2fr 80px 50px 40px;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+    transition: background 0.15s;
+}
+
+.inventory-item:hover {
+    background: var(--hover-color);
+}
+
+.inventory-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.item-price {
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.item-qty {
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* Rarity Colors */
+.inventory-item.rarity-common .item-name {
+    color: var(--text-color);
+}
+
+.inventory-item.rarity-uncommon .item-name {
+    color: #22c55e;
+}
+
+.inventory-item.rarity-rare .item-name {
+    color: #3b82f6;
+}
+
+.inventory-item.rarity-very-rare .item-name,
+.inventory-item[class*="very rare"] .item-name {
+    color: #a855f7;
+}
+
+.inventory-item.rarity-legendary .item-name {
+    color: #f59e0b;
+}
+
+.shop-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background: var(--hover-color);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.shop-footer strong {
+    color: var(--accent-color);
+}
+
+/* Saved Shops Sidebar */
+.shop-sidebar {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: var(--space-md);
+}
+
+.shop-sidebar h3 {
+    margin: 0 0 var(--space-md) 0;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.saved-shop-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-xs);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.saved-shop-item:hover {
+    background: var(--hover-color);
+}
+
+.saved-shop-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex: 1;
+}
+
+.saved-shop-icon {
+    font-size: 1.2rem;
+}
+
+.saved-shop-name {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.saved-shop-type {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.saved-shop-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.saved-shop-item:hover .saved-shop-actions {
+    opacity: 1;
+}
+
+/* Checkbox Grid for spell classes */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xs);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .shop-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .inventory-header,
+    .inventory-item {
+        grid-template-columns: 1fr 60px 40px 30px;
+    }
+
+    .shop-header {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+    }
+
+    .shop-actions {
+        width: 100%;
+        justify-content: center;
+    }
+}

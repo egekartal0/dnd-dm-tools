@@ -1,0 +1,321 @@
+// Encounter Planner Module
+
+const Encounters = {
+    currentEncounter: [],
+    savedEncounters: [],
+
+    init() {
+        this.loadState();
+        this.bindEvents();
+        this.renderMonsters();
+        this.renderSavedEncounters();
+        this.updateXPThresholds();
+    },
+
+    loadState() {
+        this.savedEncounters = Storage.get(Storage.KEYS.SAVED_ENCOUNTERS, []);
+        const partyConfig = Storage.get(Storage.KEYS.PARTY_CONFIG, { size: 4, level: 1 });
+        document.getElementById('partySize').value = partyConfig.size;
+        document.getElementById('partyLevel').value = partyConfig.level;
+    },
+
+    saveState() {
+        Storage.set(Storage.KEYS.SAVED_ENCOUNTERS, this.savedEncounters);
+        Storage.set(Storage.KEYS.PARTY_CONFIG, {
+            size: parseInt(document.getElementById('partySize').value) || 4,
+            level: parseInt(document.getElementById('partyLevel').value) || 1
+        });
+    },
+
+    bindEvents() {
+        // Party config changes
+        document.getElementById('partySize').addEventListener('change', () => {
+            this.updateXPThresholds();
+            this.updateEncounterDifficulty();
+            this.saveState();
+        });
+
+        document.getElementById('partyLevel').addEventListener('change', () => {
+            this.updateXPThresholds();
+            this.updateEncounterDifficulty();
+            this.renderMonsters(); // Re-render with recommendations
+            this.saveState();
+        });
+
+        // Monster filters
+        document.getElementById('monsterCR').addEventListener('change', () => this.renderMonsters());
+        document.getElementById('monsterType').addEventListener('change', () => this.renderMonsters());
+
+        // Encounter actions
+        document.getElementById('clearEncounter').addEventListener('click', () => {
+            this.currentEncounter = [];
+            this.renderCurrentEncounter();
+        });
+
+        document.getElementById('saveEncounter').addEventListener('click', () => this.saveEncounter());
+        document.getElementById('runEncounter').addEventListener('click', () => this.runInCombat());
+    },
+
+    getPartyConfig() {
+        return {
+            size: parseInt(document.getElementById('partySize').value) || 4,
+            level: parseInt(document.getElementById('partyLevel').value) || 1
+        };
+    },
+
+    updateXPThresholds() {
+        const { size, level } = this.getPartyConfig();
+        const thresholds = getXPThresholds(size, level);
+
+        document.getElementById('easyXP').textContent = thresholds.easy + ' XP';
+        document.getElementById('mediumXP').textContent = thresholds.medium + ' XP';
+        document.getElementById('hardXP').textContent = thresholds.hard + ' XP';
+        document.getElementById('deadlyXP').textContent = thresholds.deadly + ' XP';
+    },
+
+    renderMonsters() {
+        const container = document.getElementById('recommendedMonsters');
+        const selectedCR = document.getElementById('monsterCR').value;
+        const selectedType = document.getElementById('monsterType').value;
+        const { level } = this.getPartyConfig();
+
+        // Filter monsters
+        let monsters = MONSTERS_DATA.filter(m => {
+            if (selectedCR && m.cr !== parseFloat(selectedCR)) return false;
+            if (selectedType && m.type !== selectedType) return false;
+            return true;
+        });
+
+        // Sort by relevance to party level (recommend appropriate CRs)
+        const targetCR = this.getRecommendedCR(level);
+        monsters.sort((a, b) => {
+            const aDiff = Math.abs(a.cr - targetCR);
+            const bDiff = Math.abs(b.cr - targetCR);
+            return aDiff - bDiff;
+        });
+
+        // Limit to 50 monsters
+        monsters = monsters.slice(0, 50);
+
+        if (monsters.length === 0) {
+            container.innerHTML = '<div class="empty-state small"><p>No monsters match filters</p></div>';
+            return;
+        }
+
+        container.innerHTML = monsters.map(m => `
+            <div class="monster-item" data-name="${m.name}" data-cr="${m.cr}" data-xp="${m.xp}" data-hp="${m.hp}" data-ac="${m.ac}">
+                <div class="monster-info">
+                    <span class="monster-name">${m.name}</span>
+                    <span class="monster-meta">${m.type}</span>
+                </div>
+                <div>
+                    <span class="monster-cr">CR ${this.formatCR(m.cr)}</span>
+                    <span class="monster-xp">${m.xp} XP</span>
+                </div>
+            </div>
+        `).join('');
+
+        // Bind click events
+        container.querySelectorAll('.monster-item').forEach(item => {
+            item.addEventListener('click', () => {
+                this.addMonster({
+                    name: item.dataset.name,
+                    cr: parseFloat(item.dataset.cr),
+                    xp: parseInt(item.dataset.xp),
+                    hp: parseInt(item.dataset.hp),
+                    ac: parseInt(item.dataset.ac)
+                });
+            });
+        });
+    },
+
+    getRecommendedCR(partyLevel) {
+        // Rough guideline: party level / 4 for single monster
+        // But for multiple monsters, lower CRs work better
+        if (partyLevel <= 4) return 0.5;
+        if (partyLevel <= 8) return 2;
+        if (partyLevel <= 12) return 5;
+        if (partyLevel <= 16) return 8;
+        return 10;
+    },
+
+    formatCR(cr) {
+        if (cr === 0.125) return '1/8';
+        if (cr === 0.25) return '1/4';
+        if (cr === 0.5) return '1/2';
+        return cr.toString();
+    },
+
+    addMonster(monster) {
+        const existing = this.currentEncounter.find(m => m.name === monster.name);
+        if (existing) {
+            existing.count++;
+        } else {
+            this.currentEncounter.push({ ...monster, count: 1 });
+        }
+        this.renderCurrentEncounter();
+        showToast(`Added ${monster.name}`, 'success');
+    },
+
+    removeMonster(name) {
+        this.currentEncounter = this.currentEncounter.filter(m => m.name !== name);
+        this.renderCurrentEncounter();
+    },
+
+    adjustMonsterCount(name, delta) {
+        const monster = this.currentEncounter.find(m => m.name === name);
+        if (monster) {
+            monster.count = Math.max(1, monster.count + delta);
+            this.renderCurrentEncounter();
+        }
+    },
+
+    renderCurrentEncounter() {
+        const container = document.getElementById('encounterMonsters');
+
+        if (this.currentEncounter.length === 0) {
+            container.innerHTML = '<div class="empty-state small"><p>Click monsters to add them</p></div>';
+            this.updateEncounterDifficulty();
+            return;
+        }
+
+        container.innerHTML = this.currentEncounter.map(m => `
+            <div class="encounter-monster">
+                <div class="encounter-monster-info">
+                    <span>${m.name}</span>
+                    <span class="monster-xp">(${m.xp * m.count} XP)</span>
+                </div>
+                <div class="monster-count">
+                    <button class="count-btn" data-name="${m.name}" data-delta="-1">−</button>
+                    <span class="count-value">${m.count}</span>
+                    <button class="count-btn" data-name="${m.name}" data-delta="1">+</button>
+                    <span class="remove-monster" data-name="${m.name}">🗑️</span>
+                </div>
+            </div>
+        `).join('');
+
+        // Bind events
+        container.querySelectorAll('.count-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.adjustMonsterCount(btn.dataset.name, parseInt(btn.dataset.delta));
+            });
+        });
+
+        container.querySelectorAll('.remove-monster').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.removeMonster(btn.dataset.name);
+            });
+        });
+
+        this.updateEncounterDifficulty();
+    },
+
+    updateEncounterDifficulty() {
+        const totalMonsters = this.currentEncounter.reduce((sum, m) => sum + m.count, 0);
+        const baseXP = this.currentEncounter.reduce((sum, m) => sum + (m.xp * m.count), 0);
+        const multiplier = getEncounterMultiplier(totalMonsters);
+        const adjustedXP = Math.floor(baseXP * multiplier);
+
+        const { size, level } = this.getPartyConfig();
+        const difficulty = getEncounterDifficulty(adjustedXP, size, level);
+
+        document.getElementById('totalXP').textContent = `${adjustedXP} XP`;
+        const badge = document.getElementById('encounterDifficulty');
+        badge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        badge.className = `difficulty-badge ${difficulty}`;
+    },
+
+    saveEncounter() {
+        if (this.currentEncounter.length === 0) {
+            showToast('No monsters in encounter', 'warning');
+            return;
+        }
+
+        const name = prompt('Enter encounter name:');
+        if (!name) return;
+
+        this.savedEncounters.push({
+            id: generateId(),
+            name,
+            monsters: [...this.currentEncounter],
+            createdAt: new Date().toISOString()
+        });
+
+        this.saveState();
+        this.renderSavedEncounters();
+        showToast(`Encounter "${name}" saved!`, 'success');
+    },
+
+    renderSavedEncounters() {
+        const container = document.getElementById('savedEncountersList');
+
+        if (this.savedEncounters.length === 0) {
+            container.innerHTML = '<div class="empty-state small"><p>No saved encounters yet</p></div>';
+            return;
+        }
+
+        container.innerHTML = this.savedEncounters.map(enc => {
+            const totalXP = enc.monsters.reduce((sum, m) => sum + (m.xp * m.count), 0);
+            const monsterCount = enc.monsters.reduce((sum, m) => sum + m.count, 0);
+
+            return `
+                <div class="saved-encounter-card" data-id="${enc.id}">
+                    <div class="saved-encounter-info">
+                        <h4>${enc.name}</h4>
+                        <span class="saved-encounter-meta">${monsterCount} monsters • ${totalXP} XP</span>
+                    </div>
+                    <div class="saved-encounter-actions">
+                        <button class="btn btn-sm btn-secondary load-encounter">Load</button>
+                        <button class="btn btn-sm btn-danger delete-encounter">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Bind events
+        container.querySelectorAll('.saved-encounter-card').forEach(card => {
+            const id = card.dataset.id;
+
+            card.querySelector('.load-encounter').addEventListener('click', () => {
+                this.loadEncounter(id);
+            });
+
+            card.querySelector('.delete-encounter').addEventListener('click', () => {
+                this.deleteSavedEncounter(id);
+            });
+        });
+    },
+
+    loadEncounter(id) {
+        const encounter = this.savedEncounters.find(e => e.id === id);
+        if (encounter) {
+            this.currentEncounter = encounter.monsters.map(m => ({ ...m }));
+            this.renderCurrentEncounter();
+            showToast(`Loaded "${encounter.name}"`, 'success');
+        }
+    },
+
+    deleteSavedEncounter(id) {
+        if (confirm('Delete this saved encounter?')) {
+            this.savedEncounters = this.savedEncounters.filter(e => e.id !== id);
+            this.saveState();
+            this.renderSavedEncounters();
+            showToast('Encounter deleted', 'warning');
+        }
+    },
+
+    runInCombat() {
+        if (this.currentEncounter.length === 0) {
+            showToast('No monsters in encounter', 'warning');
+            return;
+        }
+
+        Combat.loadEncounter(this.currentEncounter);
+
+        // Switch to combat page
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-page="combat"]').classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-combat').classList.add('active');
+    }
+};

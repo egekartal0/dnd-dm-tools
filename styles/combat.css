@@ -1,0 +1,447 @@
+/* ============================================
+   Combat Tracker Styles
+   ============================================ */
+
+.combat-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.round-tracker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.round-tracker span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.round-number {
+    min-width: 32px;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gold) !important;
+}
+
+.round-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.round-btn:hover {
+    background: var(--gold);
+    color: var(--bg-dark);
+    border-color: var(--gold);
+}
+
+/* Initiative List */
+.combat-container {
+    min-height: 400px;
+}
+
+.initiative-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+/* Combatant Card */
+.combatant-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+    cursor: grab;
+}
+
+.combatant-card:active {
+    cursor: grabbing;
+}
+
+.combatant-card.dragging {
+    opacity: 0.5;
+    transform: scale(1.02);
+}
+
+.combatant-card.active-turn {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-glow), inset 0 0 20px rgba(201, 162, 39, 0.1);
+}
+
+.combatant-card.player {
+    border-left: 4px solid var(--player-color);
+}
+
+.combatant-card.enemy {
+    border-left: 4px solid var(--enemy-color);
+}
+
+.combatant-card.ally {
+    border-left: 4px solid var(--ally-color);
+}
+
+.combatant-card.dead {
+    opacity: 0.5;
+    background: var(--bg-surface);
+}
+
+.combatant-card.dead .combatant-name {
+    text-decoration: line-through;
+}
+
+/* Initiative Badge */
+.initiative-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: var(--bg-dark);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+}
+
+.initiative-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+}
+
+.initiative-label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* Combatant Info */
+.combatant-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.combatant-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.combatant-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.stat-label {
+    color: var(--text-muted);
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* HP Bar */
+.hp-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 180px;
+}
+
+.hp-bar-wrapper {
+    position: relative;
+    height: 24px;
+    background: var(--bg-dark);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.hp-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success) 0%, #1e7e34 100%);
+    border-radius: var(--radius-md);
+    transition: width var(--transition-normal);
+}
+
+.hp-bar.warning {
+    background: linear-gradient(90deg, var(--warning) 0%, #d39e00 100%);
+}
+
+.hp-bar.danger {
+    background: linear-gradient(90deg, var(--danger) 0%, var(--red-dark) 100%);
+}
+
+.hp-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hp-controls {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.hp-input {
+    width: 60px;
+    padding: var(--space-xs);
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.hp-btn {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.hp-btn.damage {
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.hp-btn.damage:hover {
+    background: var(--red-dark);
+}
+
+.hp-btn.heal {
+    background: var(--success);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.hp-btn.heal:hover {
+    background: #1e7e34;
+}
+
+/* Combatant Actions */
+.combatant-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.action-row {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.combatant-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.combatant-action:hover {
+    background: var(--bg-surface);
+    border-color: var(--border-light);
+}
+
+.combatant-action.delete:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+/* Conditions */
+.conditions-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+}
+
+.condition-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+}
+
+.condition-badge .remove-condition {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.condition-badge .remove-condition:hover {
+    opacity: 1;
+    color: var(--danger);
+}
+
+/* Condition Selector Modal Content */
+.conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-sm);
+    padding: var(--space-md);
+}
+
+.condition-option {
+    padding: var(--space-sm);
+    text-align: center;
+    font-size: 0.85rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.condition-option:hover {
+    background: var(--bg-elevated);
+    border-color: var(--gold);
+}
+
+/* Turn Indicator Arrow */
+.turn-indicator {
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--gold);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Death Saves */
+.death-saves {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm);
+    background: var(--bg-dark);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-xs);
+}
+
+.save-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.save-group label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.save-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.save-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border-light);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.save-dot.success.active {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.save-dot.failure.active {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .combatant-card {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+    }
+
+    .initiative-badge {
+        width: auto;
+        flex-direction: row;
+        gap: var(--space-sm);
+        padding: var(--space-sm);
+    }
+
+    .hp-container {
+        min-width: 100%;
+    }
+
+    .combatant-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}

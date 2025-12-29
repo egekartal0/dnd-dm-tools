@@ -1,0 +1,218 @@
+/* DM Screen Styles */
+
+.dmscreen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-md);
+}
+
+.dmscreen-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+}
+
+.dmscreen-card h3 {
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--gold);
+    font-size: 1rem;
+}
+
+/* Conditions & Actions Lists */
+.conditions-list,
+.actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.condition-item,
+.action-item {
+    padding: var(--space-sm);
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.condition-item:hover,
+.action-item:hover {
+    background: var(--bg-elevated);
+}
+
+.condition-name,
+.action-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.condition-effect,
+.action-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* Cover, DC, Light Rules */
+.cover-rules,
+.light-rules {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.cover-item,
+.light-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm);
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+}
+
+.cover-type,
+.light-type {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.cover-effect,
+.light-effect {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.dc-table,
+.exhaustion-table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.dc-row,
+.exhaustion-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm);
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+}
+
+/* Travel Table */
+.travel-table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.travel-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+}
+
+/* Rest Rules */
+.rest-rules {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.rest-item {
+    padding: var(--space-sm);
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+}
+
+.rest-type {
+    font-weight: 600;
+    color: var(--gold);
+}
+
+.rest-duration {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-left: var(--space-sm);
+}
+
+.rest-effect {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* Dice Roller */
+.dice-roller .dice-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.dice-btn {
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 600;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.dice-btn:hover {
+    background: var(--gold);
+    color: var(--bg-dark);
+    border-color: var(--gold);
+}
+
+.dice-result {
+    font-size: 2.5rem;
+    text-align: center;
+    padding: var(--space-md);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    color: var(--gold);
+    font-family: var(--font-display);
+}
+
+.dice-history {
+    margin-top: var(--space-sm);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Session Recap Template */
+.recap-template p {
+    margin-bottom: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+}
+
+.recap-template strong {
+    color: var(--gold);
+}
+
+@media (max-width: 768px) {
+    .dmscreen-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .travel-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="D&D 2024 Dungeon Master Tools - Combat Tracker, Rules Reference, Encounter Planner">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>DM Tools - D&D 2024</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/combat.css">
+    <link rel="stylesheet" href="styles/rules.css">
+    <link rel="stylesheet" href="styles/encounters.css">
+    <link rel="stylesheet" href="styles/notes.css">
+    <link rel="stylesheet" href="styles/generators.css">
+    <link rel="stylesheet" href="styles/dmscreen.css">
+    <link rel="stylesheet" href="styles/npc.css">
+    <link rel="stylesheet" href="styles/mapmaker.css">
+    <link rel="stylesheet" href="styles/spells.css">
+    <link rel="stylesheet" href="styles/shop.css">
+</head>
+
+<body>
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="header-brand">
+            <span class="logo">⚔️</span>
+            <h1>DM Tools</h1>
+            <span class="badge">2024</span>
+        </div>
+        <nav class="main-nav">
+            <button class="nav-btn active" data-page="combat">
+                <span class="nav-icon">⚔️</span>
+                <span class="nav-text">Combat</span>
+            </button>
+            <button class="nav-btn" data-page="rules">
+                <span class="nav-icon">📖</span>
+                <span class="nav-text">Rules</span>
+            </button>
+            <button class="nav-btn" data-page="encounters">
+                <span class="nav-icon">🗺️</span>
+                <span class="nav-text">Encounters</span>
+            </button>
+            <button class="nav-btn" data-page="maps">
+                <span class="nav-icon">🏗️</span>
+                <span class="nav-text">Maps</span>
+            </button>
+            <button class="nav-btn" data-page="notes">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">Notes</span>
+            </button>
+            <button class="nav-btn" data-page="generators">
+                <span class="nav-icon">🎲</span>
+                <span class="nav-text">Generators</span>
+            </button>
+            <button class="nav-btn" data-page="npc">
+                <span class="nav-icon">🎭</span>
+                <span class="nav-text">NPCs</span>
+            </button>
+            <button class="nav-btn" data-page="spells">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Spells</span>
+            </button>
+            <button class="nav-btn" data-page="dmscreen">
+                <span class="nav-icon">🛡️</span>
+                <span class="nav-text">DM Screen</span>
+            </button>
+            <button class="nav-btn" data-page="shop">
+                <span class="nav-icon">🏪</span>
+                <span class="nav-text">Shops</span>
+            </button>
+
+        </nav>
+        <div class="header-actions">
+            <button class="action-btn" id="exportBtn" title="Export Data">
+                <span>💾</span>
+            </button>
+            <button class="action-btn" id="importBtn" title="Import Data">
+                <span>📂</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Combat Tracker Page -->
+        <section id="page-combat" class="page active">
+            <div class="page-header">
+                <h2>⚔️ Combat Tracker</h2>
+                <div class="combat-controls">
+                    <div class="round-tracker">
+                        <span>Round:</span>
+                        <button class="round-btn" id="prevRound">−</button>
+                        <span id="currentRound" class="round-number">1</span>
+                        <button class="round-btn" id="nextRound">+</button>
+                    </div>
+                    <button class="btn btn-primary" id="addCombatant">
+                        <span>+</span> Add Combatant
+                    </button>
+                    <button class="btn btn-secondary" id="clearCombat">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+            <div class="combat-container">
+                <div id="initiativeList" class="initiative-list">
+                    <!-- Combatants will be added here -->
+                    <div class="empty-state">
+                        <span class="empty-icon">⚔️</span>
+                        <p>No combatants yet</p>
+                        <p class="empty-hint">Click "Add Combatant" to start tracking combat</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Combatant Modal -->
+            <div id="combatantModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add Combatant</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <form id="combatantForm" class="modal-form">
+                        <div class="form-group">
+                            <label for="combatantName">Name</label>
+                            <input type="text" id="combatantName" required placeholder="Goblin, Player Name, etc.">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="combatantInit">Initiative</label>
+                                <input type="number" id="combatantInit" required placeholder="15">
+                            </div>
+                            <div class="form-group">
+                                <label for="combatantAC">AC</label>
+                                <input type="number" id="combatantAC" placeholder="15">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="combatantHP">Current HP</label>
+                                <input type="number" id="combatantHP" required placeholder="25">
+                            </div>
+                            <div class="form-group">
+                                <label for="combatantMaxHP">Max HP</label>
+                                <input type="number" id="combatantMaxHP" required placeholder="25">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="combatantType">Type</label>
+                            <select id="combatantType">
+                                <option value="player">Player</option>
+                                <option value="enemy">Enemy</option>
+                                <option value="ally">Ally/NPC</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rules Reference Page -->
+        <section id="page-rules" class="page">
+            <div class="page-header">
+                <h2>📖 Rules Reference</h2>
+                <div class="search-container">
+                    <input type="text" id="rulesSearch" class="search-input" placeholder="Search rules...">
+                </div>
+            </div>
+            <div class="rules-categories">
+                <button class="category-btn active" data-category="all">All</button>
+                <button class="category-btn" data-category="actions">Actions</button>
+                <button class="category-btn" data-category="conditions">Conditions</button>
+                <button class="category-btn" data-category="combat">Combat</button>
+                <button class="category-btn" data-category="spellcasting">Spellcasting</button>
+                <button class="category-btn" data-category="rest">Rest & Recovery</button>
+            </div>
+            <div id="rulesContainer" class="rules-container">
+                <!-- Rules cards will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Encounter Planner Page -->
+        <section id="page-encounters" class="page">
+            <div class="page-header">
+                <h2>🗺️ Encounter Planner</h2>
+            </div>
+            <div class="encounter-layout">
+                <div class="party-config">
+                    <h3>Party Configuration</h3>
+                    <div class="party-inputs">
+                        <div class="form-group">
+                            <label for="partySize">Party Size</label>
+                            <input type="number" id="partySize" value="4" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="partyLevel">Average Level</label>
+                            <input type="number" id="partyLevel" value="1" min="1" max="20">
+                        </div>
+                    </div>
+                    <div class="xp-budgets">
+                        <h4>XP Thresholds</h4>
+                        <div class="budget-item easy">
+                            <span class="budget-label">Easy</span>
+                            <span id="easyXP" class="budget-value">100</span>
+                        </div>
+                        <div class="budget-item medium">
+                            <span class="budget-label">Medium</span>
+                            <span id="mediumXP" class="budget-value">200</span>
+                        </div>
+                        <div class="budget-item hard">
+                            <span class="budget-label">Hard</span>
+                            <span id="hardXP" class="budget-value">300</span>
+                        </div>
+                        <div class="budget-item deadly">
+                            <span class="budget-label">Deadly</span>
+                            <span id="deadlyXP" class="budget-value">400</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="monster-browser">
+                    <h3>Monster Recommendations</h3>
+                    <div class="monster-filters">
+                        <select id="monsterCR">
+                            <option value="">Filter by CR</option>
+                            <option value="0">CR 0</option>
+                            <option value="0.125">CR 1/8</option>
+                            <option value="0.25">CR 1/4</option>
+                            <option value="0.5">CR 1/2</option>
+                            <option value="1">CR 1</option>
+                            <option value="2">CR 2</option>
+                            <option value="3">CR 3</option>
+                            <option value="4">CR 4</option>
+                            <option value="5">CR 5</option>
+                            <option value="6">CR 6</option>
+                            <option value="7">CR 7</option>
+                            <option value="8">CR 8</option>
+                            <option value="9">CR 9</option>
+                            <option value="10">CR 10</option>
+                        </select>
+                        <select id="monsterType">
+                            <option value="">Filter by Type</option>
+                            <option value="beast">Beast</option>
+                            <option value="humanoid">Humanoid</option>
+                            <option value="undead">Undead</option>
+                            <option value="fiend">Fiend</option>
+                            <option value="dragon">Dragon</option>
+                            <option value="monstrosity">Monstrosity</option>
+                            <option value="aberration">Aberration</option>
+                            <option value="elemental">Elemental</option>
+                            <option value="construct">Construct</option>
+                            <option value="celestial">Celestial</option>
+                            <option value="fey">Fey</option>
+                            <option value="giant">Giant</option>
+                            <option value="ooze">Ooze</option>
+                            <option value="plant">Plant</option>
+                        </select>
+                        <button class="btn btn-primary" id="addCustomMonster" style="margin-left: auto;">
+                            <span>➕</span> Add Monster
+                        </button>
+                    </div>
+                    <div id="recommendedMonsters" class="monster-list">
+                        <!-- Monsters will be loaded here -->
+                    </div>
+                </div>
+                <div class="current-encounter">
+                    <h3>Current Encounter</h3>
+                    <div class="encounter-difficulty">
+                        <span>Difficulty:</span>
+                        <span id="encounterDifficulty" class="difficulty-badge easy">Easy</span>
+                        <span id="totalXP" class="total-xp">0 XP</span>
+                    </div>
+                    <div id="encounterMonsters" class="encounter-monsters">
+                        <div class="empty-state small">
+                            <p>Click monsters to add them</p>
+                        </div>
+                    </div>
+                    <div class="encounter-actions">
+                        <button class="btn btn-secondary" id="clearEncounter">Clear</button>
+                        <button class="btn btn-primary" id="saveEncounter">Save Encounter</button>
+                        <button class="btn btn-accent" id="runEncounter">Run in Combat</button>
+                    </div>
+                </div>
+            </div>
+            <div class="saved-encounters">
+                <h3>Saved Encounters</h3>
+                <div id="savedEncountersList" class="saved-list">
+                    <!-- Saved encounters will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Session Notes Page -->
+        <section id="page-notes" class="page">
+            <div class="page-header">
+                <h2>📝 Session Notes</h2>
+                <div class="notes-controls">
+                    <input type="text" id="notesSearch" class="search-input" placeholder="Search notes...">
+                    <button class="btn btn-primary" id="addNote">
+                        <span>+</span> New Note
+                    </button>
+                </div>
+            </div>
+            <div class="notes-categories">
+                <button class="note-cat-btn active" data-category="all">All</button>
+                <button class="note-cat-btn" data-category="session">Sessions</button>
+                <button class="note-cat-btn" data-category="npc">NPCs</button>
+                <button class="note-cat-btn" data-category="location">Locations</button>
+                <button class="note-cat-btn" data-category="plot">Plot Hooks</button>
+                <button class="note-cat-btn" data-category="loot">Loot</button>
+            </div>
+            <div id="notesContainer" class="notes-container">
+                <!-- Notes will be loaded here -->
+                <div class="empty-state">
+                    <span class="empty-icon">📝</span>
+                    <p>No notes yet</p>
+                    <p class="empty-hint">Click "New Note" to start documenting your campaign</p>
+                </div>
+            </div>
+            <!-- Note Modal -->
+            <div id="noteModal" class="modal">
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h3 id="noteModalTitle">New Note</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <form id="noteForm" class="modal-form">
+                        <input type="hidden" id="noteId">
+                        <div class="form-group">
+                            <label for="noteTitle">Title</label>
+                            <input type="text" id="noteTitle" required placeholder="Session 1, Goblin Cave, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="noteCategory">Category</label>
+                            <select id="noteCategory">
+                                <option value="session">Session Log</option>
+                                <option value="npc">NPC</option>
+                                <option value="location">Location</option>
+                                <option value="plot">Plot Hook</option>
+                                <option value="loot">Loot</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="noteContent">Content</label>
+                            <textarea id="noteContent" rows="10" placeholder="Write your notes here..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="deleteNote"
+                                style="display:none;">Delete</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generators Page -->
+        <section id="page-generators" class="page">
+            <div class="page-header">
+                <h2>🎲 Generators</h2>
+            </div>
+            <div class="generators-grid">
+                <!-- NPC Name Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">👤</span>
+                        <h3>NPC Names</h3>
+                    </div>
+                    <div class="generator-options">
+                        <select id="nameRace">
+                            <option value="human">Human</option>
+                            <option value="elf">Elf</option>
+                            <option value="dwarf">Dwarf</option>
+                            <option value="halfling">Halfling</option>
+                            <option value="tiefling">Tiefling</option>
+                            <option value="dragonborn">Dragonborn</option>
+                            <option value="orc">Orc/Half-Orc</option>
+                            <option value="gnome">Gnome</option>
+                        </select>
+                        <select id="nameGender">
+                            <option value="any">Any</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="name">Generate</button>
+                    <div class="generator-result" id="nameResult"></div>
+                </div>
+
+                <!-- NPC Personality Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">🎭</span>
+                        <h3>NPC Personality</h3>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="personality">Generate</button>
+                    <div class="generator-result" id="personalityResult"></div>
+                </div>
+
+                <!-- Tavern Name Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">🍺</span>
+                        <h3>Tavern Names</h3>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="tavern">Generate</button>
+                    <div class="generator-result" id="tavernResult"></div>
+                </div>
+
+                <!-- Quest Hook Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">📜</span>
+                        <h3>Quest Hooks</h3>
+                    </div>
+                    <select id="questType">
+                        <option value="any">Any Type</option>
+                        <option value="rescue">Rescue</option>
+                        <option value="hunt">Monster Hunt</option>
+                        <option value="fetch">Fetch Quest</option>
+                        <option value="mystery">Mystery</option>
+                        <option value="escort">Escort</option>
+                    </select>
+                    <button class="btn btn-primary generate-btn" data-generator="quest">Generate</button>
+                    <div class="generator-result" id="questResult"></div>
+                </div>
+
+                <!-- Treasure Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">💎</span>
+                        <h3>Treasure</h3>
+                    </div>
+                    <div class="generator-options">
+                        <select id="treasureCR">
+                            <option value="1">CR 0-4</option>
+                            <option value="5">CR 5-10</option>
+                            <option value="11">CR 11-16</option>
+                            <option value="17">CR 17+</option>
+                        </select>
+                        <select id="treasureType">
+                            <option value="individual">Individual</option>
+                            <option value="hoard">Hoard</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="treasure">Generate</button>
+                    <div class="generator-result" id="treasureResult"></div>
+                </div>
+
+                <!-- Plot Twist Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">🔄</span>
+                        <h3>Plot Twists</h3>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="twist">Generate</button>
+                    <div class="generator-result" id="twistResult"></div>
+                </div>
+
+                <!-- Random Encounter Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">⚡</span>
+                        <h3>Random Encounters</h3>
+                    </div>
+                    <div class="generator-options">
+                        <select id="encounterEnvironment">
+                            <option value="forest">Forest</option>
+                            <option value="dungeon">Dungeon</option>
+                            <option value="city">City</option>
+                            <option value="road">Road/Travel</option>
+                            <option value="mountain">Mountain</option>
+                            <option value="swamp">Swamp</option>
+                            <option value="coast">Coast</option>
+                            <option value="desert">Desert</option>
+                        </select>
+                        <select id="encounterLevel">
+                            <option value="1">Level 1-4</option>
+                            <option value="5">Level 5-10</option>
+                            <option value="11">Level 11-16</option>
+                            <option value="17">Level 17-20</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="encounter">Generate</button>
+                    <div class="generator-result" id="encounterResult"></div>
+                </div>
+
+                <!-- Trap Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">🪤</span>
+                        <h3>Traps</h3>
+                    </div>
+                    <select id="trapDanger">
+                        <option value="setback">Setback</option>
+                        <option value="dangerous">Dangerous</option>
+                        <option value="deadly">Deadly</option>
+                    </select>
+                    <button class="btn btn-primary generate-btn" data-generator="trap">Generate</button>
+                    <div class="generator-result" id="trapResult"></div>
+                </div>
+
+                <!-- Riddle Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">❓</span>
+                        <h3>Riddles & Puzzles</h3>
+                    </div>
+                    <button class="btn btn-primary generate-btn" data-generator="riddle">Generate</button>
+                    <div class="generator-result" id="riddleResult"></div>
+                </div>
+
+                <!-- Weather Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">🌤️</span>
+                        <h3>Weather</h3>
+                    </div>
+                    <select id="weatherClimate">
+                        <option value="temperate">Temperate</option>
+                        <option value="tropical">Tropical</option>
+                        <option value="arctic">Arctic</option>
+                        <option value="desert">Desert</option>
+                    </select>
+                    <button class="btn btn-primary generate-btn" data-generator="weather">Generate</button>
+                    <div class="generator-result" id="weatherResult"></div>
+                </div>
+
+                <!-- Combat Description Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">💥</span>
+                        <h3>Combat Descriptions</h3>
+                    </div>
+                    <select id="combatType">
+                        <option value="hit">Hit</option>
+                        <option value="miss">Miss</option>
+                        <option value="crit">Critical Hit</option>
+                        <option value="kill">Killing Blow</option>
+                    </select>
+                    <select id="weaponType">
+                        <option value="sword">Sword</option>
+                        <option value="axe">Axe</option>
+                        <option value="bow">Bow</option>
+                        <option value="spell">Spell</option>
+                        <option value="fist">Unarmed</option>
+                    </select>
+                    <button class="btn btn-primary generate-btn" data-generator="combatDesc">Generate</button>
+                    <div class="generator-result" id="combatDescResult"></div>
+                </div>
+
+                <!-- Shop Items Generator -->
+                <div class="generator-card">
+                    <div class="generator-header">
+                        <span class="generator-icon">🏪</span>
+                        <h3>Shop Inventory</h3>
+                    </div>
+                    <select id="shopType">
+                        <option value="general">General Store</option>
+                        <option value="blacksmith">Blacksmith</option>
+                        <option value="magic">Magic Shop</option>
+                        <option value="potion">Potion Shop</option>
+                        <option value="tavern">Tavern Menu</option>
+                    </select>
+                    <button class="btn btn-primary generate-btn" data-generator="shop">Generate</button>
+                    <div class="generator-result" id="shopResult"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NPC Generator Page -->
+        <section id="page-npc" class="page">
+            <div class="page-header">
+                <h2>🎭 NPC Generator</h2>
+            </div>
+            <div class="npc-page-layout">
+                <div class="npc-main">
+                    <div class="npc-controls">
+                        <button class="btn btn-primary" id="generateRandomNPC">
+                            <span>🎲</span> Generate Random NPC
+                        </button>
+                        <button class="btn btn-secondary" id="createNewNPC">
+                            <span>✏️</span> Create Custom NPC
+                        </button>
+                    </div>
+                    <div id="npcDisplay">
+                        <div class="empty-state">
+                            <span>🎭</span>
+                            <p>No NPC generated yet</p>
+                            <small>Click "Generate Random NPC" or "Create Custom NPC" to start!</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="npc-sidebar">
+                    <h3>📜 Saved NPCs</h3>
+                    <div id="savedNPCList">
+                        <div class="empty-state">
+                            <span>📜</span>
+                            <p>No saved NPCs yet</p>
+                            <small>Generate or create an NPC and save it!</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Maker Page -->
+        <section id="page-maps" class="page">
+            <div class="page-header">
+                <h2>🏗️ Map Maker</h2>
+            </div>
+            <div class="mapmaker-layout">
+                <!-- Tools Sidebar -->
+                <div class="map-tools">
+                    <div class="tool-section">
+                        <h3>🎨 Tiles</h3>
+                        <div class="tile-palette">
+                            <button class="tile-btn active" data-tile="floor" title="Floor">
+                                <div class="tile-preview" style="background: #4a4a5e;"></div>
+                                <span>Floor</span>
+                            </button>
+                            <button class="tile-btn" data-tile="wall" title="Wall">
+                                <div class="tile-preview" style="background: #2d2d3e;"></div>
+                                <span>Wall</span>
+                            </button>
+                            <button class="tile-btn" data-tile="door" title="Door">
+                                <div class="tile-preview" style="background: #8b4513;">🚪</div>
+                                <span>Door</span>
+                            </button>
+                            <button class="tile-btn" data-tile="water" title="Water">
+                                <div class="tile-preview" style="background: #1e90ff;">~</div>
+                                <span>Water</span>
+                            </button>
+                            <button class="tile-btn" data-tile="grass" title="Grass">
+                                <div class="tile-preview" style="background: #228b22;"></div>
+                                <span>Grass</span>
+                            </button>
+                            <button class="tile-btn" data-tile="road" title="Road">
+                                <div class="tile-preview" style="background: #a9a9a9;"></div>
+                                <span>Road</span>
+                            </button>
+                            <button class="tile-btn" data-tile="stairs_up" title="Stairs Up">
+                                <div class="tile-preview" style="background: #4a4a5e;">△</div>
+                                <span>Up</span>
+                            </button>
+                            <button class="tile-btn" data-tile="stairs_down" title="Stairs Down">
+                                <div class="tile-preview" style="background: #4a4a5e;">▽</div>
+                                <span>Down</span>
+                            </button>
+                            <button class="tile-btn" data-tile="trap" title="Trap">
+                                <div class="tile-preview" style="background: #8b0000;">⚠</div>
+                                <span>Trap</span>
+                            </button>
+                            <button class="tile-btn" data-tile="chest" title="Chest">
+                                <div class="tile-preview" style="background: #ffd700;">📦</div>
+                                <span>Chest</span>
+                            </button>
+                            <button class="tile-btn" data-tile="tree" title="Tree">
+                                <div class="tile-preview" style="background: #228b22;">🌲</div>
+                                <span>Tree</span>
+                            </button>
+                            <button class="tile-btn" data-tile="house" title="House">
+                                <div class="tile-preview" style="background: #cd853f;">🏠</div>
+                                <span>House</span>
+                            </button>
+                            <button class="tile-btn" data-tile="tavern" title="Tavern">
+                                <div class="tile-preview" style="background: #d2691e;">🍺</div>
+                                <span>Tavern</span>
+                            </button>
+                            <button class="tile-btn" data-tile="empty" title="Erase">
+                                <div class="tile-preview" style="background: #1a1a2e; border: 1px dashed #666;"></div>
+                                <span>Erase</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Area -->
+                <div class="map-canvas-container">
+                    <canvas id="mapCanvas"></canvas>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="map-sidebar">
+                    <div class="generator-section">
+                        <h4>🎲 Random Generators</h4>
+                        <div class="generator-btns">
+                            <button class="btn btn-primary" id="generateDungeon">
+                                <span>🏰</span> Generate Dungeon
+                            </button>
+                            <button class="btn btn-secondary" id="generateCity">
+                                <span>🏘️</span> Generate City
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="map-settings">
+                        <div class="form-group">
+                            <label for="mapGridSize">Grid Size</label>
+                            <select id="mapGridSize">
+                                <option value="15">15x15 (Small)</option>
+                                <option value="20" selected>20x20 (Medium)</option>
+                                <option value="25">25x25 (Large)</option>
+                                <option value="30">30x30 (Huge)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="saved-maps-section">
+                        <h4>📂 Saved Maps</h4>
+                        <div id="savedMapList">
+                            <div class="empty-state small">
+                                <p>No saved maps</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-actions">
+                        <button class="btn btn-primary" id="saveMap">
+                            <span>💾</span> Save Map
+                        </button>
+                        <button class="btn btn-secondary" id="exportMapImage">
+                            <span>📷</span> Export Image
+                        </button>
+                        <button class="btn btn-danger" id="clearMap">
+                            <span>🗑️</span> Clear Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spell Lookup Page -->
+        <section id="page-spells" class="page">
+            <div class="page-header">
+                <h2>📚 Spell Lookup</h2>
+            </div>
+            <div class="spells-layout">
+                <div class="spell-filters">
+                    <input type="text" id="spellSearch" class="search-input" placeholder="Search spells...">
+                    <select id="spellLevel">
+                        <option value="">All Levels</option>
+                        <option value="0">Cantrips</option>
+                        <option value="1">1st Level</option>
+                        <option value="2">2nd Level</option>
+                        <option value="3">3rd Level</option>
+                        <option value="4">4th Level</option>
+                        <option value="5">5th Level</option>
+                        <option value="6">6th Level</option>
+                        <option value="7">7th Level</option>
+                        <option value="8">8th Level</option>
+                        <option value="9">9th Level</option>
+                    </select>
+                    <select id="spellSchool">
+                        <option value="">All Schools</option>
+                        <option value="Abjuration">Abjuration</option>
+                        <option value="Conjuration">Conjuration</option>
+                        <option value="Divination">Divination</option>
+                        <option value="Enchantment">Enchantment</option>
+                        <option value="Evocation">Evocation</option>
+                        <option value="Illusion">Illusion</option>
+                        <option value="Necromancy">Necromancy</option>
+                        <option value="Transmutation">Transmutation</option>
+                    </select>
+                    <select id="spellClass">
+                        <option value="">All Classes</option>
+                        <option value="Bard">Bard</option>
+                        <option value="Cleric">Cleric</option>
+                        <option value="Druid">Druid</option>
+                        <option value="Paladin">Paladin</option>
+                        <option value="Ranger">Ranger</option>
+                        <option value="Sorcerer">Sorcerer</option>
+                        <option value="Warlock">Warlock</option>
+                        <option value="Wizard">Wizard</option>
+                    </select>
+                    <div class="filter-group">
+                        <input type="checkbox" id="showFavorites">
+                        <label for="showFavorites">⭐ Favorites Only</label>
+                    </div>
+                    <button class="btn btn-secondary" id="clearSpellFilters">Clear Filters</button>
+                    <button class="btn btn-primary" id="addCustomSpell">
+                        <span>➕</span> Add Custom Spell
+                    </button>
+                    <span id="spellCount">0 spells found</span>
+                </div>
+                <div id="spellsList" class="spells-container">
+                    <!-- Spells will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- DM Screen Page -->
+        <section id="page-dmscreen" class="page">
+            <div class="page-header">
+                <h2>🛡️ DM Screen</h2>
+            </div>
+            <div class="dmscreen-grid">
+                <!-- Conditions Quick Reference -->
+                <div class="dmscreen-card">
+                    <h3>Conditions</h3>
+                    <div class="conditions-list" id="conditionsList">
+                        <!-- Conditions will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Actions Quick Reference -->
+                <div class="dmscreen-card">
+                    <h3>Actions in Combat</h3>
+                    <div class="actions-list" id="actionsList">
+                        <!-- Actions will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Cover Rules -->
+                <div class="dmscreen-card">
+                    <h3>Cover</h3>
+                    <div class="cover-rules">
+                        <div class="cover-item">
+                            <span class="cover-type">Half Cover</span>
+                            <span class="cover-effect">+2 AC, +2 Dex saves</span>
+                        </div>
+                        <div class="cover-item">
+                            <span class="cover-type">Three-Quarters</span>
+                            <span class="cover-effect">+5 AC, +5 Dex saves</span>
+                        </div>
+                        <div class="cover-item">
+                            <span class="cover-type">Total Cover</span>
+                            <span class="cover-effect">Can't be targeted</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Difficulty Classes -->
+                <div class="dmscreen-card">
+                    <h3>Difficulty Classes</h3>
+                    <div class="dc-table">
+                        <div class="dc-row"><span>Very Easy</span><span>DC 5</span></div>
+                        <div class="dc-row"><span>Easy</span><span>DC 10</span></div>
+                        <div class="dc-row"><span>Medium</span><span>DC 15</span></div>
+                        <div class="dc-row"><span>Hard</span><span>DC 20</span></div>
+                        <div class="dc-row"><span>Very Hard</span><span>DC 25</span></div>
+                        <div class="dc-row"><span>Nearly Impossible</span><span>DC 30</span></div>
+                    </div>
+                </div>
+
+                <!-- Light & Vision -->
+                <div class="dmscreen-card">
+                    <h3>Light & Vision</h3>
+                    <div class="light-rules">
+                        <div class="light-item">
+                            <span class="light-type">Bright Light</span>
+                            <span class="light-effect">Normal vision</span>
+                        </div>
+                        <div class="light-item">
+                            <span class="light-type">Dim Light</span>
+                            <span class="light-effect">Lightly obscured, disadvantage on Perception</span>
+                        </div>
+                        <div class="light-item">
+                            <span class="light-type">Darkness</span>
+                            <span class="light-effect">Heavily obscured, effectively blinded</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exhaustion Levels -->
+                <div class="dmscreen-card">
+                    <h3>Exhaustion (2024)</h3>
+                    <div class="exhaustion-table">
+                        <div class="exhaustion-row">
+                            <span>Level 1-5</span>
+                            <span>−2 per level to d20 tests</span>
+                        </div>
+                        <div class="exhaustion-row">
+                            <span>Level 6</span>
+                            <span>Speed reduced to 0</span>
+                        </div>
+                        <div class="exhaustion-row">
+                            <span>Level 10</span>
+                            <span>Death</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Travel Pace -->
+                <div class="dmscreen-card">
+                    <h3>Travel Pace</h3>
+                    <div class="travel-table">
+                        <div class="travel-row">
+                            <span>Fast</span>
+                            <span>4 mph</span>
+                            <span>30 miles/day</span>
+                            <span>-5 Perception</span>
+                        </div>
+                        <div class="travel-row">
+                            <span>Normal</span>
+                            <span>3 mph</span>
+                            <span>24 miles/day</span>
+                            <span>—</span>
+                        </div>
+                        <div class="travel-row">
+                            <span>Slow</span>
+                            <span>2 mph</span>
+                            <span>18 miles/day</span>
+                            <span>Can stealth</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resting -->
+                <div class="dmscreen-card">
+                    <h3>Resting</h3>
+                    <div class="rest-rules">
+                        <div class="rest-item">
+                            <span class="rest-type">Short Rest</span>
+                            <span class="rest-duration">1+ hour</span>
+                            <span class="rest-effect">Spend Hit Dice to heal, some features recharge</span>
+                        </div>
+                        <div class="rest-item">
+                            <span class="rest-type">Long Rest</span>
+                            <span class="rest-duration">8+ hours</span>
+                            <span class="rest-effect">Full HP, regain half HD, reset features, 1 exhaustion</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Dice Roller -->
+                <div class="dmscreen-card dice-roller">
+                    <h3>Quick Dice</h3>
+                    <div class="dice-buttons">
+                        <button class="dice-btn" data-dice="d4">d4</button>
+                        <button class="dice-btn" data-dice="d6">d6</button>
+                        <button class="dice-btn" data-dice="d8">d8</button>
+                        <button class="dice-btn" data-dice="d10">d10</button>
+                        <button class="dice-btn" data-dice="d12">d12</button>
+                        <button class="dice-btn" data-dice="d20">d20</button>
+                        <button class="dice-btn" data-dice="d100">d100</button>
+                    </div>
+                    <div class="dice-result" id="diceResult">🎲</div>
+                    <div class="dice-history" id="diceHistory"></div>
+                </div>
+
+                <!-- Session Recap Template -->
+                <div class="dmscreen-card">
+                    <h3>Session Recap Template</h3>
+                    <div class="recap-template">
+                        <p><strong>Last Time:</strong> What happened last session?</p>
+                        <p><strong>Current:</strong> Where are the players now?</p>
+                        <p><strong>Goal:</strong> What are they trying to do?</p>
+                        <p><strong>NPCs Met:</strong> Who did they interact with?</p>
+                        <p><strong>Hooks:</strong> What quests are outstanding?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Shop Generator Page -->
+        <section id="page-shop" class="page">
+            <div class="page-header">
+                <h2>🏪 Shop Generator</h2>
+            </div>
+            <div class="shop-controls">
+                <select id="shopType">
+                    <option value="blacksmith">⚔️ Blacksmith</option>
+                    <option value="magic">✨ Magic Shop</option>
+                    <option value="potion">🧪 Potion Shop</option>
+                    <option value="general">🏪 General Store</option>
+                    <option value="tavern">🍺 Tavern</option>
+                    <option value="temple">⛪ Temple</option>
+                </select>
+                <button class="btn btn-primary" id="generateShop">
+                    <span>🎲</span> Generate Shop
+                </button>
+            </div>
+            <div class="shop-layout">
+                <div class="shop-main">
+                    <div id="shopDisplay">
+                        <div class="empty-state">
+                            <span>🏪</span>
+                            <p>No shop generated yet</p>
+                            <small>Select a shop type and click "Generate Shop"</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-sidebar">
+                    <h3>📁 Saved Shops</h3>
+                    <div id="savedShopList">
+                        <!-- Saved shops will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="data/rules-data.js"></script>
+    <script src="data/monsters-data.js"></script>
+    <script src="data/generators-data.js"></script>
+    <script src="data/npc-data.js"></script>
+    <script src="data/spells-data.js"></script>
+    <script src="scripts/storage.js"></script>
+    <script src="scripts/combat.js"></script>
+    <script src="scripts/rules.js"></script>
+    <script src="scripts/encounters.js"></script>
+    <script src="scripts/notes.js"></script>
+    <script src="scripts/generators.js"></script>
+    <script src="scripts/dmscreen.js"></script>
+    <script src="scripts/npc.js"></script>
+    <script src="scripts/mapmaker.js"></script>
+    <script src="scripts/spells.js"></script>
+    <script src="scripts/shop.js"></script>
+    <script src="scripts/custom-entries.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+
+</html>
