@@ -48,12 +48,25 @@ const Storage = {
         const data = {
             version: '1.0',
             exportDate: new Date().toISOString(),
+            // Combat & Encounters
             combatants: this.get(this.KEYS.COMBATANTS, []),
             currentRound: this.get(this.KEYS.CURRENT_ROUND, 1),
             savedEncounters: this.get(this.KEYS.SAVED_ENCOUNTERS, []),
+            // Notes & Settings
             notes: this.get(this.KEYS.NOTES, []),
             partyConfig: this.get(this.KEYS.PARTY_CONFIG, { size: 4, level: 1 }),
-            settings: this.get(this.KEYS.SETTINGS, {})
+            settings: this.get(this.KEYS.SETTINGS, {}),
+            // NPCs
+            npcs: JSON.parse(localStorage.getItem('dnd-saved-npcs') || '[]'),
+            // Maps
+            maps: JSON.parse(localStorage.getItem('dnd-saved-maps') || '[]'),
+            // Shops
+            shops: JSON.parse(localStorage.getItem('dnd-shops') || '[]'),
+            // Spell Favorites
+            spellFavorites: JSON.parse(localStorage.getItem('dnd-spell-favorites') || '[]'),
+            // Custom Monsters & Spells
+            customMonsters: JSON.parse(localStorage.getItem('dnd-custom-monsters') || '[]'),
+            customSpells: JSON.parse(localStorage.getItem('dnd-custom-spells') || '[]')
         };
 
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -66,7 +79,7 @@ const Storage = {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        showToast('Data exported successfully!', 'success');
+        showToast('All data exported!', 'success');
     },
 
     // Import data from JSON file
@@ -90,8 +103,17 @@ const Storage = {
                     if (data.notes) this.set(this.KEYS.NOTES, data.notes);
                     if (data.partyConfig) this.set(this.KEYS.PARTY_CONFIG, data.partyConfig);
                     if (data.settings) this.set(this.KEYS.SETTINGS, data.settings);
+                    // NPCs, Maps, Shops
+                    if (data.npcs) localStorage.setItem('dnd-saved-npcs', JSON.stringify(data.npcs));
+                    if (data.maps) localStorage.setItem('dnd-saved-maps', JSON.stringify(data.maps));
+                    if (data.shops) localStorage.setItem('dnd-shops', JSON.stringify(data.shops));
+                    // Spell Favorites & Custom entries
+                    if (data.spellFavorites) localStorage.setItem('dnd-spell-favorites', JSON.stringify(data.spellFavorites));
+                    if (data.customMonsters) localStorage.setItem('dnd-custom-monsters', JSON.stringify(data.customMonsters));
+                    if (data.customSpells) localStorage.setItem('dnd-custom-spells', JSON.stringify(data.customSpells));
 
-                    showToast('Data imported successfully!', 'success');
+                    showToast('All data imported! Refreshing...', 'success');
+                    setTimeout(() => location.reload(), 1000);
                     resolve(data);
                 } catch (error) {
                     showToast('Failed to import: ' + error.message, 'error');
