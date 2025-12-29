@@ -60,6 +60,7 @@
     overflow: hidden;
     transition: all 0.2s ease;
     min-height: 48px;
+    flex-shrink: 0;
 }
 
 .spell-card:hover {
