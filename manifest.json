@@ -2,7 +2,7 @@
     "name": "D&D DM Tools",
     "short_name": "DM Tools",
     "description": "Dungeon Master tools for D&D 2024 - Combat tracker, rules reference, encounter planner, and more!",
-    "start_url": "/index.html",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#0a0a0f",
     "theme_color": "#1a1a2e",
@@ -15,6 +15,9 @@
             "purpose": "any"
         }
     ],
-    "categories": ["games", "utilities"],
+    "categories": [
+        "games",
+        "utilities"
+    ],
     "lang": "tr"
 }
