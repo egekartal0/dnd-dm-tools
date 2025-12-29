@@ -66,7 +66,9 @@ const Storage = {
             spellFavorites: JSON.parse(localStorage.getItem('dnd-spell-favorites') || '[]'),
             // Custom Monsters & Spells
             customMonsters: JSON.parse(localStorage.getItem('dnd-custom-monsters') || '[]'),
-            customSpells: JSON.parse(localStorage.getItem('dnd-custom-spells') || '[]')
+            customSpells: JSON.parse(localStorage.getItem('dnd-custom-spells') || '[]'),
+            // Quests
+            quests: JSON.parse(localStorage.getItem('dnd-quests') || '[]')
         };
 
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -111,6 +113,8 @@ const Storage = {
                     if (data.spellFavorites) localStorage.setItem('dnd-spell-favorites', JSON.stringify(data.spellFavorites));
                     if (data.customMonsters) localStorage.setItem('dnd-custom-monsters', JSON.stringify(data.customMonsters));
                     if (data.customSpells) localStorage.setItem('dnd-custom-spells', JSON.stringify(data.customSpells));
+                    // Quests
+                    if (data.quests) localStorage.setItem('dnd-quests', JSON.stringify(data.quests));
 
                     showToast('All data imported! Refreshing...', 'success');
                     setTimeout(() => location.reload(), 1000);

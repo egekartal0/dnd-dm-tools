@@ -1,0 +1,436 @@
+/* Quest Tracker Styles */
+
+.quests-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.quests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.quests-header h2 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.quest-filters {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.quest-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+}
+
+.quest-filter-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.quest-filter-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+#addQuestBtn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#addQuestBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Quest List */
+.quests-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Quest Card */
+.quest-card {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: var(--space-md);
+    transition: all 0.2s;
+}
+
+.quest-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.quest-card.status-completed {
+    border-left: 4px solid #10b981;
+    opacity: 0.85;
+}
+
+.quest-card.status-failed {
+    border-left: 4px solid #ef4444;
+    opacity: 0.7;
+}
+
+.quest-card.status-active {
+    border-left: 4px solid #f59e0b;
+}
+
+.quest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-sm);
+}
+
+.quest-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.quest-title-row h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.quest-status-badge {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.quest-status-badge.active {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.quest-status-badge.completed {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.quest-status-badge.failed {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.quest-actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.quest-action-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.quest-action-btn:hover {
+    background: var(--hover-color);
+}
+
+/* Quest Details */
+.quest-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+
+.quest-detail {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.detail-label {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+/* Quest Steps */
+.quest-steps {
+    background: var(--bg-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.steps-label {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.quest-steps ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.quest-steps li {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+/* Status Buttons */
+.quest-status-buttons {
+    display: flex;
+    gap: var(--space-xs);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-color);
+}
+
+.status-btn {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.status-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.status-btn.active.current {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: #f59e0b;
+    color: #f59e0b;
+}
+
+.status-btn.completed.current {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.status-btn.failed.current {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* Quest Modal */
+#questModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-md);
+}
+
+#questModal.active {
+    display: flex;
+}
+
+.quest-modal-content {
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+}
+
+.quest-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.quest-modal-header h3 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.quest-modal-body {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.quest-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.quest-form-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.quest-form-group input,
+.quest-form-group textarea {
+    padding: 10px 12px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.quest-form-group input:focus,
+.quest-form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.quest-form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Steps Input */
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.step-input-row {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.quest-step-input {
+    flex: 1;
+    padding: 8px 12px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.remove-step-btn {
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.2);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.remove-step-btn:hover {
+    background: rgba(239, 68, 68, 0.4);
+}
+
+#addStepBtn {
+    align-self: flex-start;
+    padding: 6px 12px;
+    background: var(--hover-color);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+#addStepBtn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Modal Footer */
+.quest-modal-footer {
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.quest-modal-footer button {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#cancelQuestBtn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+#cancelQuestBtn:hover {
+    border-color: var(--text-color);
+    color: var(--text-color);
+}
+
+#saveQuestBtn {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border: none;
+    color: white;
+}
+
+#saveQuestBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Empty State */
+.quests-list .empty-state {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--text-secondary);
+}
+
+.quests-list .empty-state span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: var(--space-sm);
+}

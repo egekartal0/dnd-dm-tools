@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="styles/mapmaker.css">
     <link rel="stylesheet" href="styles/spells.css">
     <link rel="stylesheet" href="styles/shop.css">
+    <link rel="stylesheet" href="styles/quests.css">
 </head>
 
 <body>
@@ -81,6 +82,10 @@
             <button class="nav-btn" data-page="shop">
                 <span class="nav-icon">🏪</span>
                 <span class="nav-text">Shops</span>
+            </button>
+            <button class="nav-btn" data-page="quests">
+                <span class="nav-icon">📜</span>
+                <span class="nav-text">Quests</span>
             </button>
 
         </nav>
@@ -1006,6 +1011,62 @@
             </div>
         </section>
 
+        <!-- Quest Tracker Page -->
+        <section id="page-quests" class="page">
+            <div class="quests-container">
+                <div class="quests-header">
+                    <h2>📜 Quest Tracker</h2>
+                    <div class="quest-filters">
+                        <button class="quest-filter-btn active" data-filter="all">All</button>
+                        <button class="quest-filter-btn" data-filter="active">Active</button>
+                        <button class="quest-filter-btn" data-filter="completed">Completed</button>
+                        <button class="quest-filter-btn" data-filter="failed">Failed</button>
+                    </div>
+                    <button id="addQuestBtn">+ New Quest</button>
+                </div>
+                <div id="questsList" class="quests-list">
+                    <!-- Quests will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Quest Modal -->
+            <div id="questModal" class="quest-modal">
+                <div class="quest-modal-content">
+                    <div class="quest-modal-header">
+                        <h3 id="questModalTitle">New Quest</h3>
+                    </div>
+                    <form id="questForm" class="quest-modal-body">
+                        <input type="hidden" id="questId">
+                        <div class="quest-form-group">
+                            <label for="questTitle">Quest Title *</label>
+                            <input type="text" id="questTitle" placeholder="The Lost Artifact..." required>
+                        </div>
+                        <div class="quest-form-group">
+                            <label for="questGiver">Quest Giver (NPC)</label>
+                            <input type="text" id="questGiver" placeholder="Lord Aldric, the blacksmith...">
+                        </div>
+                        <div class="quest-form-group">
+                            <label for="questLocation">Location</label>
+                            <input type="text" id="questLocation" placeholder="The Sunken Temple...">
+                        </div>
+                        <div class="quest-form-group">
+                            <label for="questObjective">Objective</label>
+                            <textarea id="questObjective" placeholder="Find the ancient artifact before the cult..."></textarea>
+                        </div>
+                        <div class="quest-form-group">
+                            <label>Steps / Key Events</label>
+                            <div id="questSteps" class="steps-container"></div>
+                            <button type="button" id="addStepBtn">+ Add Step</button>
+                        </div>
+                    </form>
+                    <div class="quest-modal-footer">
+                        <button type="button" id="cancelQuestBtn">Cancel</button>
+                        <button type="button" id="saveQuestBtn">Save Quest</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Toast Notifications -->
@@ -1032,6 +1093,7 @@
     <script src="scripts/spells.js"></script>
     <script src="scripts/shop.js"></script>
     <script src="scripts/custom-entries.js"></script>
+    <script src="scripts/quests.js"></script>
     <script src="scripts/app.js"></script>
 </body>
 
