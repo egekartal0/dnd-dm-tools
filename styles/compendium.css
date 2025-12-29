@@ -263,6 +263,30 @@
     color: var(--text-color);
 }
 
+/* Add to Encounter Button */
+.monster-add-encounter {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-color);
+}
+
+.add-encounter-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-encounter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
 /* Spell Card (Compendium) */
 .spell-card-comp {
     background: var(--surface-color);

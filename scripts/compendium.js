@@ -90,23 +90,44 @@ const Compendium = {
     },
 
     async search(query) {
-        if (query.length < 2) {
+        if (query.length < 1) {
             this.showWelcome();
             return;
         }
 
         this.showLoading();
+        this.lastQuery = query.toLowerCase();
 
         try {
             const endpoint = this.currentTab === 'monsters'
-                ? `https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(query)}&limit=20`
-                : `https://api.open5e.com/v1/spells/?search=${encodeURIComponent(query)}&limit=20`;
+                ? `https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(query)}&limit=50`
+                : `https://api.open5e.com/v1/spells/?search=${encodeURIComponent(query)}&limit=50`;
 
             const response = await fetch(endpoint);
             const data = await response.json();
 
             if (data.results && data.results.length > 0) {
-                this.renderResults(data.results);
+                // Sort by relevance - exact matches first, then starts with, then contains
+                const sorted = data.results.sort((a, b) => {
+                    const aName = a.name.toLowerCase();
+                    const bName = b.name.toLowerCase();
+                    const q = this.lastQuery;
+
+                    // Exact match
+                    if (aName === q) return -1;
+                    if (bName === q) return 1;
+
+                    // Starts with query
+                    const aStarts = aName.startsWith(q);
+                    const bStarts = bName.startsWith(q);
+                    if (aStarts && !bStarts) return -1;
+                    if (bStarts && !aStarts) return 1;
+
+                    // Alphabetical among similar matches
+                    return aName.localeCompare(bName);
+                });
+
+                this.renderResults(sorted.slice(0, 20));
             } else {
                 this.showNoResults(query);
             }
@@ -204,6 +225,12 @@ const Compendium = {
                         `).join('')}
                     </div>
                 ` : ''}
+                
+                <div class="monster-add-encounter">
+                    <button class="add-encounter-btn" onclick="Compendium.addToEncounter('${monster.name.replace(/'/g, "\\'")}', ${monster.hit_points}, ${monster.armor_class}, '${monster.challenge_rating}')">
+                        ⚔️ Add to Encounter
+                    </button>
+                </div>
             </div>
         `;
     },
@@ -314,6 +341,42 @@ const Compendium = {
         }
 
         this.renderResults(items);
+    },
+
+    addToEncounter(name, hp, ac, cr) {
+        // Add monster to Combat Tracker
+        if (typeof Combat !== 'undefined' && Combat.addCombatant) {
+            Combat.addCombatant({
+                name: name,
+                hp: hp,
+                maxHp: hp,
+                ac: ac,
+                initiative: Math.floor(Math.random() * 20) + 1,
+                isNPC: true,
+                conditions: []
+            });
+            showToast(`${name} added to Combat!`, 'success');
+        } else {
+            // Fallback - add to localStorage for encounters
+            const encounters = JSON.parse(localStorage.getItem('dnd_saved_encounters') || '[]');
+            const current = encounters.find(e => e.name === 'Compendium Monsters') || {
+                name: 'Compendium Monsters',
+                monsters: [],
+                createdAt: new Date().toISOString()
+            };
+
+            current.monsters.push({ name, hp, ac, cr });
+
+            const idx = encounters.findIndex(e => e.name === 'Compendium Monsters');
+            if (idx >= 0) {
+                encounters[idx] = current;
+            } else {
+                encounters.push(current);
+            }
+
+            localStorage.setItem('dnd_saved_encounters', JSON.stringify(encounters));
+            showToast(`${name} saved to Compendium Monsters encounter!`, 'success');
+        }
     }
 };
 
