@@ -122,12 +122,14 @@ const Spells = {
             return;
         }
 
-        container.innerHTML = spells.map(spell => `
-            <div class="spell-card" data-spell="${spell.name}">
-                <div class="spell-header" onclick="Spells.toggleSpell('${spell.name}')">
+        container.innerHTML = spells.map(spell => {
+            const escapedName = spell.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            return `
+            <div class="spell-card" data-spell="${escapedName}">
+                <div class="spell-header" onclick="Spells.toggleSpell(this)">
                     <div class="spell-title">
                         <button class="favorite-btn ${this.favorites.includes(spell.name) ? 'active' : ''}" 
-                                onclick="event.stopPropagation(); Spells.toggleFavorite('${spell.name}')">
+                                onclick="event.stopPropagation(); Spells.toggleFavorite('${escapedName}')">
                             ${this.favorites.includes(spell.name) ? '⭐' : '☆'}
                         </button>
                         <h4>${spell.name}</h4>
@@ -166,7 +168,8 @@ const Spells = {
                     </div>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         // Update count
         const countEl = document.getElementById('spellCount');
@@ -175,8 +178,8 @@ const Spells = {
         }
     },
 
-    toggleSpell(name) {
-        const card = document.querySelector(`.spell-card[data-spell="${name}"]`);
+    toggleSpell(headerElement) {
+        const card = headerElement.closest('.spell-card');
         if (card) {
             // Close other expanded cards
             document.querySelectorAll('.spell-card.expanded').forEach(c => {
