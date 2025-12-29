@@ -1,6 +1,6 @@
 // Service Worker for offline support
 
-const CACHE_NAME = 'dnd-dm-tools-v7';
+const CACHE_NAME = 'dnd-dm-tools-v8';
 const ASSETS = [
     '/',
     '/index.html',
@@ -16,6 +16,7 @@ const ASSETS = [
     '/styles/spells.css',
     '/styles/shop.css',
     '/styles/quests.css',
+    '/styles/compendium.css',
     '/scripts/app.js',
     '/scripts/storage.js',
     '/scripts/combat.js',
@@ -30,6 +31,7 @@ const ASSETS = [
     '/scripts/shop.js',
     '/scripts/custom-entries.js',
     '/scripts/quests.js',
+    '/scripts/compendium.js',
     '/data/rules-data.js',
     '/data/monsters-data.js',
     '/data/generators-data.js',

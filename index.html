@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="styles/spells.css">
     <link rel="stylesheet" href="styles/shop.css">
     <link rel="stylesheet" href="styles/quests.css">
+    <link rel="stylesheet" href="styles/compendium.css">
 </head>
 
 <body>
@@ -71,9 +72,9 @@
                 <span class="nav-icon">🎭</span>
                 <span class="nav-text">NPCs</span>
             </button>
-            <button class="nav-btn" data-page="spells">
-                <span class="nav-icon">📚</span>
-                <span class="nav-text">Spells</span>
+            <button class="nav-btn" data-page="compendium">
+                <span class="nav-icon">📖</span>
+                <span class="nav-text">Compendium</span>
             </button>
             <button class="nav-btn" data-page="dmscreen">
                 <span class="nav-icon">🛡️</span>
@@ -752,60 +753,26 @@
         </section>
 
         <!-- Spell Lookup Page -->
-        <section id="page-spells" class="page">
-            <div class="page-header">
-                <h2>📚 Spell Lookup</h2>
-            </div>
-            <div class="spells-layout">
-                <div class="spell-filters">
-                    <input type="text" id="spellSearch" class="search-input" placeholder="Search spells...">
-                    <select id="spellLevel">
-                        <option value="">All Levels</option>
-                        <option value="0">Cantrips</option>
-                        <option value="1">1st Level</option>
-                        <option value="2">2nd Level</option>
-                        <option value="3">3rd Level</option>
-                        <option value="4">4th Level</option>
-                        <option value="5">5th Level</option>
-                        <option value="6">6th Level</option>
-                        <option value="7">7th Level</option>
-                        <option value="8">8th Level</option>
-                        <option value="9">9th Level</option>
-                    </select>
-                    <select id="spellSchool">
-                        <option value="">All Schools</option>
-                        <option value="Abjuration">Abjuration</option>
-                        <option value="Conjuration">Conjuration</option>
-                        <option value="Divination">Divination</option>
-                        <option value="Enchantment">Enchantment</option>
-                        <option value="Evocation">Evocation</option>
-                        <option value="Illusion">Illusion</option>
-                        <option value="Necromancy">Necromancy</option>
-                        <option value="Transmutation">Transmutation</option>
-                    </select>
-                    <select id="spellClass">
-                        <option value="">All Classes</option>
-                        <option value="Bard">Bard</option>
-                        <option value="Cleric">Cleric</option>
-                        <option value="Druid">Druid</option>
-                        <option value="Paladin">Paladin</option>
-                        <option value="Ranger">Ranger</option>
-                        <option value="Sorcerer">Sorcerer</option>
-                        <option value="Warlock">Warlock</option>
-                        <option value="Wizard">Wizard</option>
-                    </select>
-                    <div class="filter-group">
-                        <input type="checkbox" id="showFavorites">
-                        <label for="showFavorites">⭐ Favorites Only</label>
+        <!-- Compendium Page (Monsters & Spells API) -->
+        <section id="page-compendium" class="page">
+            <div class="compendium-container">
+                <div class="compendium-header">
+                    <h2>📖 Compendium</h2>
+                    <div class="compendium-tabs">
+                        <button class="compendium-tab active" data-tab="monsters">👹 Monsters</button>
+                        <button class="compendium-tab" data-tab="spells">✨ Spells</button>
                     </div>
-                    <button class="btn btn-secondary" id="clearSpellFilters">Clear Filters</button>
-                    <button class="btn btn-primary" id="addCustomSpell">
-                        <span>➕</span> Add Custom Spell
-                    </button>
-                    <span id="spellCount">0 spells found</span>
+                    <div class="compendium-search">
+                        <input type="text" id="compendiumSearch"
+                            placeholder="Search monsters... (e.g., dragon, goblin)">
+                        <label class="favorites-toggle">
+                            <input type="checkbox" id="showCompendiumFavorites">
+                            ⭐ Favorites
+                        </label>
+                    </div>
                 </div>
-                <div id="spellsList" class="spells-container">
-                    <!-- Spells will be loaded here -->
+                <div id="compendiumResults" class="compendium-results">
+                    <!-- Search results will appear here -->
                 </div>
             </div>
         </section>
@@ -1051,7 +1018,8 @@
                         </div>
                         <div class="quest-form-group">
                             <label for="questObjective">Objective</label>
-                            <textarea id="questObjective" placeholder="Find the ancient artifact before the cult..."></textarea>
+                            <textarea id="questObjective"
+                                placeholder="Find the ancient artifact before the cult..."></textarea>
                         </div>
                         <div class="quest-form-group">
                             <label>Steps / Key Events</label>
@@ -1094,6 +1062,7 @@
     <script src="scripts/shop.js"></script>
     <script src="scripts/custom-entries.js"></script>
     <script src="scripts/quests.js"></script>
+    <script src="scripts/compendium.js"></script>
     <script src="scripts/app.js"></script>
 </body>
 
