@@ -1,6 +1,6 @@
 // Service Worker for offline support
 
-const CACHE_NAME = 'dnd-dm-tools-v9';
+const CACHE_NAME = 'dnd-dm-tools-v10';
 const ASSETS = [
     '/',
     '/index.html',

@@ -268,14 +268,14 @@
 }
 
 .quest-modal-content {
-    background: var(--surface-color);
+    background: #1a1a2e;
     border-radius: var(--radius-lg);
     width: 100%;
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
     border: 1px solid var(--border-color);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
 .quest-modal-header {

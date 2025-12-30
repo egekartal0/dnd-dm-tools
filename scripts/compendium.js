@@ -208,8 +208,19 @@ const Compendium = {
         }
     },
 
+    // Helper to extract AC from API response (can be number or object)
+    getAC(monster) {
+        if (typeof monster.armor_class === 'number') return monster.armor_class;
+        if (monster.armor_class && typeof monster.armor_class === 'object') {
+            return monster.armor_class.value || monster.armor_class[0]?.value || 10;
+        }
+        return 10;
+    },
+
     renderMonsterCard(monster) {
         const isFavorite = this.favorites.monsters.some(f => f.slug === monster.slug);
+        const ac = this.getAC(monster);
+        const hp = monster.hit_points || 1;
 
         return `
             <div class="monster-card" data-slug="${monster.slug}">
@@ -227,11 +238,11 @@ const Compendium = {
                 <div class="monster-stats">
                     <div class="stat-block">
                         <span class="stat-label">AC</span>
-                        <span class="stat-value">${monster.armor_class}</span>
+                        <span class="stat-value">${ac}</span>
                     </div>
                     <div class="stat-block">
                         <span class="stat-label">HP</span>
-                        <span class="stat-value">${monster.hit_points}</span>
+                        <span class="stat-value">${hp}</span>
                     </div>
                     <div class="stat-block">
                         <span class="stat-label">CR</span>
@@ -264,7 +275,7 @@ const Compendium = {
                 ` : ''}
                 
                 <div class="monster-add-encounter">
-                    <button class="add-encounter-btn" onclick="Compendium.addToEncounter('${monster.name.replace(/'/g, "\\'")}', ${monster.hit_points}, ${monster.armor_class}, '${monster.challenge_rating}')">
+                    <button class="add-encounter-btn" onclick="Compendium.addToEncounter('${monster.name.replace(/'/g, "\\'")}', ${hp}, ${ac}, '${monster.challenge_rating}')">
                         ⚔️ Add to Encounter
                     </button>
                 </div>
