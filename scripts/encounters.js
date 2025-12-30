@@ -188,11 +188,13 @@ const Encounters = {
             return;
         }
 
-        container.innerHTML = this.currentEncounter.map(m => `
+        container.innerHTML = this.currentEncounter.map(m => {
+            const totalXP = (m.xp || 0) * (m.count || 1);
+            return `
             <div class="encounter-monster">
                 <div class="encounter-monster-info">
                     <span>${m.name}</span>
-                    <span class="monster-xp">(${m.xp * m.count} XP)</span>
+                    <span class="monster-xp">(${totalXP.toLocaleString()} XP)</span>
                 </div>
                 <div class="monster-count">
                     <button class="count-btn" data-name="${m.name}" data-delta="-1">−</button>
@@ -201,7 +203,7 @@ const Encounters = {
                     <span class="remove-monster" data-name="${m.name}">🗑️</span>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
 
         // Bind events
         container.querySelectorAll('.count-btn').forEach(btn => {
@@ -392,13 +394,20 @@ const Encounters = {
     },
 
     addApiMonster(name, hp, ac, cr, xp) {
-        this.currentEncounter.push({
-            name: name,
-            hp: hp,
-            ac: ac,
-            cr: cr,
-            xp: xp
-        });
+        // Check if monster already exists
+        const existing = this.currentEncounter.find(m => m.name === name);
+        if (existing) {
+            existing.count++;
+        } else {
+            this.currentEncounter.push({
+                name: name,
+                hp: hp || 10,
+                ac: ac || 10,
+                cr: cr,
+                xp: xp || 0,
+                count: 1
+            });
+        }
         this.renderCurrentEncounter();
         showToast(`${name} added to encounter!`, 'success');
 
