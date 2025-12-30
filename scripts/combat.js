@@ -436,5 +436,26 @@ const Combat = {
                 e.target.remove();
             }
         });
+    },
+
+    // Add monster directly from Compendium
+    addFromCompendium(name, hp, ac, cr) {
+        const combatant = {
+            id: generateId(),
+            name: name,
+            initiative: Math.floor(Math.random() * 20) + 1,
+            ac: parseInt(ac) || 10,
+            hp: parseInt(hp) || 10,
+            maxHp: parseInt(hp) || 10,
+            type: 'enemy',
+            conditions: [],
+            deathSaves: { successes: 0, failures: 0 }
+        };
+
+        this.combatants.push(combatant);
+        this.sortByInitiative();
+        this.saveState();
+        this.render();
+        return true;
     }
 };

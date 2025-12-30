@@ -221,6 +221,7 @@ const Compendium = {
         const isFavorite = this.favorites.monsters.some(f => f.slug === monster.slug);
         const ac = this.getAC(monster);
         const hp = monster.hit_points || 1;
+        const escapedName = monster.name.replace(/'/g, "\\'");
 
         return `
             <div class="monster-card" data-slug="${monster.slug}">
@@ -230,7 +231,7 @@ const Compendium = {
                         <span class="monster-type">${monster.size} ${monster.type}${monster.subtype ? ` (${monster.subtype})` : ''}</span>
                     </div>
                     <button class="favorite-btn ${isFavorite ? 'active' : ''}" 
-                            onclick="Compendium.toggleFavorite('monsters', ${JSON.stringify(monster).replace(/"/g, '&quot;')})">
+                            onclick="Compendium.toggleMonsterFavorite('${monster.slug}', '${escapedName}', ${hp}, ${ac}, '${monster.challenge_rating}')">
                         ${isFavorite ? '⭐' : '☆'}
                     </button>
                 </div>
@@ -373,6 +374,29 @@ const Compendium = {
         }
     },
 
+    toggleMonsterFavorite(slug, name, hp, ac, cr) {
+        const index = this.favorites.monsters.findIndex(f => f.slug === slug);
+
+        if (index >= 0) {
+            this.favorites.monsters.splice(index, 1);
+            showToast(`Removed from favorites`, 'warning');
+        } else {
+            this.favorites.monsters.push({ slug, name, hit_points: hp, armor_class: ac, challenge_rating: cr });
+            showToast(`Added to favorites!`, 'success');
+        }
+
+        this.saveFavorites();
+
+        // Update button
+        const card = document.querySelector(`[data-slug="${slug}"]`);
+        if (card) {
+            const btn = card.querySelector('.favorite-btn');
+            const isFav = this.favorites.monsters.some(f => f.slug === slug);
+            btn.classList.toggle('active', isFav);
+            btn.textContent = isFav ? '⭐' : '☆';
+        }
+    },
+
     showFavorites() {
         const container = document.getElementById('compendiumResults');
         const items = this.favorites[this.currentTab];
@@ -392,17 +416,9 @@ const Compendium = {
     },
 
     addToEncounter(name, hp, ac, cr) {
-        // Add monster to Combat Tracker
-        if (typeof Combat !== 'undefined' && Combat.addCombatant) {
-            Combat.addCombatant({
-                name: name,
-                hp: hp,
-                maxHp: hp,
-                ac: ac,
-                initiative: Math.floor(Math.random() * 20) + 1,
-                isNPC: true,
-                conditions: []
-            });
+        // Use the dedicated Compendium add function
+        if (typeof Combat !== 'undefined' && Combat.addFromCompendium) {
+            Combat.addFromCompendium(name, hp, ac, cr);
             showToast(`${name} added to Combat!`, 'success');
         } else {
             // Fallback - add to localStorage for encounters

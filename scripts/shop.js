@@ -208,10 +208,21 @@ const ShopGenerator = {
     },
 
     generateShop() {
-        const typeKey = document.getElementById('shopType')?.value || 'general';
-        const shopType = this.shopTypes[typeKey];
+        const shopTypeSelect = document.getElementById('shopType');
+        console.log('Shop type select element:', shopTypeSelect);
+        console.log('Selected value:', shopTypeSelect?.value);
+        console.log('Selected index:', shopTypeSelect?.selectedIndex);
 
-        if (!shopType) return;
+        const typeKey = shopTypeSelect?.value || 'general';
+        console.log('Using typeKey:', typeKey);
+
+        const shopType = this.shopTypes[typeKey];
+        console.log('Shop type data:', shopType);
+
+        if (!shopType) {
+            console.error('Shop type not found for key:', typeKey);
+            return;
+        }
 
         // Generate owner
         const ownerFirst = this.ownerFirstNames[Math.floor(Math.random() * this.ownerFirstNames.length)];
