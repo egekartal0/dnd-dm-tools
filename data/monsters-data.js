@@ -152,7 +152,87 @@ const MONSTERS_DATA = [
     { name: "Guardian Naga", cr: 10, xp: 5900, type: "monstrosity", hp: 127, ac: 18 },
     { name: "Stone Golem", cr: 10, xp: 5900, type: "construct", hp: 178, ac: 17 },
     { name: "Young Gold Dragon", cr: 10, xp: 5900, type: "dragon", hp: 178, ac: 18 },
-    { name: "Young Red Dragon", cr: 10, xp: 5900, type: "dragon", hp: 178, ac: 18 }
+    { name: "Young Red Dragon", cr: 10, xp: 5900, type: "dragon", hp: 178, ac: 18 },
+
+    // CR 11
+    { name: "Behir", cr: 11, xp: 7200, type: "monstrosity", hp: 168, ac: 17 },
+    { name: "Djinni", cr: 11, xp: 7200, type: "elemental", hp: 161, ac: 17 },
+    { name: "Efreeti", cr: 11, xp: 7200, type: "elemental", hp: 200, ac: 17 },
+    { name: "Horned Devil", cr: 11, xp: 7200, type: "fiend", hp: 178, ac: 18 },
+    { name: "Remorhaz", cr: 11, xp: 7200, type: "monstrosity", hp: 195, ac: 17 },
+    { name: "Roc", cr: 11, xp: 7200, type: "monstrosity", hp: 248, ac: 15 },
+
+    // CR 12
+    { name: "Archmage", cr: 12, xp: 8400, type: "humanoid", hp: 99, ac: 12 },
+    { name: "Erinyes", cr: 12, xp: 8400, type: "fiend", hp: 153, ac: 18 },
+
+    // CR 13
+    { name: "Adult Brass Dragon", cr: 13, xp: 10000, type: "dragon", hp: 172, ac: 18 },
+    { name: "Adult White Dragon", cr: 13, xp: 10000, type: "dragon", hp: 200, ac: 18 },
+    { name: "Beholder", cr: 13, xp: 10000, type: "aberration", hp: 180, ac: 18 },
+    { name: "Nalfeshnee", cr: 13, xp: 10000, type: "fiend", hp: 184, ac: 18 },
+    { name: "Rakshasa", cr: 13, xp: 10000, type: "fiend", hp: 110, ac: 16 },
+    { name: "Storm Giant", cr: 13, xp: 10000, type: "giant", hp: 230, ac: 16 },
+    { name: "Vampire", cr: 13, xp: 10000, type: "undead", hp: 144, ac: 16 },
+
+    // CR 14
+    { name: "Adult Black Dragon", cr: 14, xp: 11500, type: "dragon", hp: 195, ac: 19 },
+    { name: "Adult Copper Dragon", cr: 14, xp: 11500, type: "dragon", hp: 184, ac: 18 },
+    { name: "Ice Devil", cr: 14, xp: 11500, type: "fiend", hp: 180, ac: 18 },
+
+    // CR 15
+    { name: "Adult Bronze Dragon", cr: 15, xp: 13000, type: "dragon", hp: 212, ac: 19 },
+    { name: "Adult Green Dragon", cr: 15, xp: 13000, type: "dragon", hp: 207, ac: 19 },
+    { name: "Mummy Lord", cr: 15, xp: 13000, type: "undead", hp: 97, ac: 17 },
+    { name: "Purple Worm", cr: 15, xp: 13000, type: "monstrosity", hp: 247, ac: 18 },
+
+    // CR 16
+    { name: "Adult Blue Dragon", cr: 16, xp: 15000, type: "dragon", hp: 225, ac: 19 },
+    { name: "Adult Silver Dragon", cr: 16, xp: 15000, type: "dragon", hp: 243, ac: 19 },
+    { name: "Iron Golem", cr: 16, xp: 15000, type: "construct", hp: 210, ac: 20 },
+    { name: "Marilith", cr: 16, xp: 15000, type: "fiend", hp: 189, ac: 18 },
+    { name: "Planetar", cr: 16, xp: 15000, type: "celestial", hp: 200, ac: 19 },
+
+    // CR 17
+    { name: "Adult Gold Dragon", cr: 17, xp: 18000, type: "dragon", hp: 256, ac: 19 },
+    { name: "Adult Red Dragon", cr: 17, xp: 18000, type: "dragon", hp: 256, ac: 19 },
+    { name: "Death Knight", cr: 17, xp: 18000, type: "undead", hp: 180, ac: 20 },
+    { name: "Dragon Turtle", cr: 17, xp: 18000, type: "dragon", hp: 341, ac: 20 },
+    { name: "Goristro", cr: 17, xp: 18000, type: "fiend", hp: 310, ac: 19 },
+
+    // CR 18
+    { name: "Demilich", cr: 18, xp: 20000, type: "undead", hp: 80, ac: 20 },
+
+    // CR 19
+    { name: "Balor", cr: 19, xp: 22000, type: "fiend", hp: 262, ac: 19 },
+
+    // CR 20
+    { name: "Ancient Brass Dragon", cr: 20, xp: 25000, type: "dragon", hp: 297, ac: 20 },
+    { name: "Ancient White Dragon", cr: 20, xp: 25000, type: "dragon", hp: 333, ac: 20 },
+    { name: "Pit Fiend", cr: 20, xp: 25000, type: "fiend", hp: 300, ac: 19 },
+
+    // CR 21
+    { name: "Ancient Black Dragon", cr: 21, xp: 33000, type: "dragon", hp: 367, ac: 22 },
+    { name: "Ancient Copper Dragon", cr: 21, xp: 33000, type: "dragon", hp: 350, ac: 21 },
+    { name: "Lich", cr: 21, xp: 33000, type: "undead", hp: 135, ac: 17 },
+    { name: "Solar", cr: 21, xp: 33000, type: "celestial", hp: 243, ac: 21 },
+
+    // CR 22
+    { name: "Ancient Bronze Dragon", cr: 22, xp: 41000, type: "dragon", hp: 444, ac: 22 },
+    { name: "Ancient Green Dragon", cr: 22, xp: 41000, type: "dragon", hp: 385, ac: 21 },
+
+    // CR 23
+    { name: "Ancient Blue Dragon", cr: 23, xp: 50000, type: "dragon", hp: 481, ac: 22 },
+    { name: "Ancient Silver Dragon", cr: 23, xp: 50000, type: "dragon", hp: 487, ac: 22 },
+    { name: "Empyrean", cr: 23, xp: 50000, type: "celestial", hp: 313, ac: 22 },
+    { name: "Kraken", cr: 23, xp: 50000, type: "monstrosity", hp: 472, ac: 18 },
+
+    // CR 24
+    { name: "Ancient Gold Dragon", cr: 24, xp: 62000, type: "dragon", hp: 546, ac: 22 },
+    { name: "Ancient Red Dragon", cr: 24, xp: 62000, type: "dragon", hp: 546, ac: 22 },
+
+    // CR 30
+    { name: "Tarrasque", cr: 30, xp: 155000, type: "monstrosity", hp: 676, ac: 25 }
 ];
 
 // XP Thresholds by level (2024 rules)
