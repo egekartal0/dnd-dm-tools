@@ -97,6 +97,19 @@
     border-color: var(--primary-color);
 }
 
+.monster-filters-row select option {
+    background: #1a1a2e;
+    color: white;
+    padding: 8px;
+}
+
+/* Spell filter options */
+.spell-filters-row select option {
+    background: #1a1a2e;
+    color: white;
+    padding: 8px;
+}
+
 /* Search */
 .compendium-search {
     display: flex;
