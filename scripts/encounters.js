@@ -353,12 +353,15 @@ const Encounters = {
                     return aName.localeCompare(bName);
                 });
 
-                resultsContainer.innerHTML = sorted.slice(0, 8).map(m => `
-                    <div class="api-monster-item" onclick="Encounters.addApiMonster('${m.name.replace(/'/g, "\\'")}', ${m.hit_points}, ${m.armor_class}, '${m.challenge_rating}', ${this.getCRXP(m.challenge_rating)})">
+                resultsContainer.innerHTML = sorted.slice(0, 8).map(m => {
+                    const ac = this.getAC(m);
+                    const xp = this.getCRXP(m.challenge_rating);
+                    return `
+                    <div class="api-monster-item" onclick="Encounters.addApiMonster('${m.name.replace(/'/g, "\\'")}', ${m.hit_points}, ${ac}, '${m.challenge_rating}', ${xp})">
                         <span class="api-monster-name">${m.name}</span>
-                        <span class="api-monster-info">CR ${m.challenge_rating} • ${m.type}</span>
+                        <span class="api-monster-info">CR ${m.challenge_rating} • ${xp} XP</span>
                     </div>
-                `).join('');
+                `}).join('');
             } else {
                 resultsContainer.innerHTML = '<div class="api-no-results">No monsters found</div>';
             }
@@ -371,9 +374,21 @@ const Encounters = {
         const xpByCR = {
             '0': 10, '1/8': 25, '1/4': 50, '1/2': 100,
             '1': 200, '2': 450, '3': 700, '4': 1100, '5': 1800,
-            '6': 2300, '7': 2900, '8': 3900, '9': 5000, '10': 5900
+            '6': 2300, '7': 2900, '8': 3900, '9': 5000, '10': 5900,
+            '11': 7200, '12': 8400, '13': 10000, '14': 11500, '15': 13000,
+            '16': 15000, '17': 18000, '18': 20000, '19': 22000, '20': 25000,
+            '21': 33000, '22': 41000, '23': 50000, '24': 62000, '25': 75000,
+            '26': 90000, '27': 105000, '28': 120000, '29': 135000, '30': 155000
         };
-        return xpByCR[cr] || 100;
+        return xpByCR[String(cr)] || 0;
+    },
+
+    getAC(monster) {
+        if (typeof monster.armor_class === 'number') return monster.armor_class;
+        if (monster.armor_class && typeof monster.armor_class === 'object') {
+            return monster.armor_class.value || monster.armor_class[0]?.value || 10;
+        }
+        return 10;
     },
 
     addApiMonster(name, hp, ac, cr, xp) {
