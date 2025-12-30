@@ -46,14 +46,12 @@ const Compendium = {
             }
         });
 
-        // Spell filters
+        // Spell filters - trigger search even without query
         document.getElementById('compendiumSpellLevel')?.addEventListener('change', () => {
-            const query = document.getElementById('compendiumSearch').value;
-            if (query) this.search(query);
+            this.searchWithFilters();
         });
         document.getElementById('compendiumSpellSchool')?.addEventListener('change', () => {
-            const query = document.getElementById('compendiumSearch').value;
-            if (query) this.search(query);
+            this.searchWithFilters();
         });
     },
 
@@ -103,6 +101,42 @@ const Compendium = {
                 <p>Searching...</p>
             </div>
         `;
+    },
+
+    async searchWithFilters() {
+        const query = document.getElementById('compendiumSearch')?.value || '';
+        const levelFilter = document.getElementById('compendiumSpellLevel')?.value;
+        const schoolFilter = document.getElementById('compendiumSpellSchool')?.value;
+
+        // If no filters and no query, show welcome
+        if (!query && !levelFilter && !schoolFilter) {
+            this.showWelcome();
+            return;
+        }
+
+        this.showLoading();
+
+        try {
+            // Build API URL with filters
+            let url = 'https://api.open5e.com/v1/spells/?limit=50';
+            if (query) url += `&search=${encodeURIComponent(query)}`;
+            if (levelFilter) url += `&level_int=${levelFilter}`;
+            if (schoolFilter) url += `&school=${schoolFilter}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.results && data.results.length > 0) {
+                // Sort alphabetically
+                const sorted = data.results.sort((a, b) => a.name.localeCompare(b.name));
+                this.renderResults(sorted.slice(0, 30));
+            } else {
+                this.showNoResults(query || 'filters');
+            }
+        } catch (error) {
+            console.error('API Error:', error);
+            this.showError();
+        }
     },
 
     async search(query) {
