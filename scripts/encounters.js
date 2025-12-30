@@ -54,6 +54,15 @@ const Encounters = {
 
         document.getElementById('saveEncounter').addEventListener('click', () => this.saveEncounter());
         document.getElementById('runEncounter').addEventListener('click', () => this.runInCombat());
+
+        // API Search
+        let apiSearchTimeout;
+        document.getElementById('encounterApiSearch')?.addEventListener('input', (e) => {
+            clearTimeout(apiSearchTimeout);
+            apiSearchTimeout = setTimeout(() => {
+                this.searchApi(e.target.value);
+            }, 500);
+        });
     },
 
     getPartyConfig() {
@@ -317,5 +326,69 @@ const Encounters = {
         document.querySelector('[data-page="combat"]').classList.add('active');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-combat').classList.add('active');
+    },
+
+    async searchApi(query) {
+        const resultsContainer = document.getElementById('apiSearchResults');
+
+        if (query.length < 2) {
+            resultsContainer.innerHTML = '';
+            return;
+        }
+
+        resultsContainer.innerHTML = '<div class="api-loading">Searching...</div>';
+
+        try {
+            const response = await fetch(`https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(query)}&limit=10`);
+            const data = await response.json();
+
+            if (data.results && data.results.length > 0) {
+                // Sort by relevance
+                const sorted = data.results.sort((a, b) => {
+                    const aName = a.name.toLowerCase();
+                    const bName = b.name.toLowerCase();
+                    const q = query.toLowerCase();
+                    if (aName.startsWith(q) && !bName.startsWith(q)) return -1;
+                    if (bName.startsWith(q) && !aName.startsWith(q)) return 1;
+                    return aName.localeCompare(bName);
+                });
+
+                resultsContainer.innerHTML = sorted.slice(0, 8).map(m => `
+                    <div class="api-monster-item" onclick="Encounters.addApiMonster('${m.name.replace(/'/g, "\\'")}', ${m.hit_points}, ${m.armor_class}, '${m.challenge_rating}', ${this.getCRXP(m.challenge_rating)})">
+                        <span class="api-monster-name">${m.name}</span>
+                        <span class="api-monster-info">CR ${m.challenge_rating} • ${m.type}</span>
+                    </div>
+                `).join('');
+            } else {
+                resultsContainer.innerHTML = '<div class="api-no-results">No monsters found</div>';
+            }
+        } catch (error) {
+            resultsContainer.innerHTML = '<div class="api-error">Search failed - check connection</div>';
+        }
+    },
+
+    getCRXP(cr) {
+        const xpByCR = {
+            '0': 10, '1/8': 25, '1/4': 50, '1/2': 100,
+            '1': 200, '2': 450, '3': 700, '4': 1100, '5': 1800,
+            '6': 2300, '7': 2900, '8': 3900, '9': 5000, '10': 5900
+        };
+        return xpByCR[cr] || 100;
+    },
+
+    addApiMonster(name, hp, ac, cr, xp) {
+        this.currentEncounter.push({
+            name: name,
+            hp: hp,
+            ac: ac,
+            cr: cr,
+            xp: xp
+        });
+        this.renderCurrentEncounter();
+        showToast(`${name} added to encounter!`, 'success');
+
+        // Clear search
+        document.getElementById('encounterApiSearch').value = '';
+        document.getElementById('apiSearchResults').innerHTML = '';
     }
 };

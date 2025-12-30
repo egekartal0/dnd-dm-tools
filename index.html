@@ -280,6 +280,14 @@
                             <span>➕</span> Add Monster
                         </button>
                     </div>
+
+                    <!-- API Search -->
+                    <div class="api-search-section">
+                        <input type="text" id="encounterApiSearch" class="api-search-input"
+                            placeholder="🔍 Search Open5e for more monsters...">
+                        <div id="apiSearchResults" class="api-search-results"></div>
+                    </div>
+
                     <div id="recommendedMonsters" class="monster-list">
                         <!-- Monsters will be loaded here -->
                     </div>
@@ -769,6 +777,33 @@
                             <input type="checkbox" id="showCompendiumFavorites">
                             ⭐ Favorites
                         </label>
+                    </div>
+                    <!-- Spell Filters (hidden when monsters tab active) -->
+                    <div id="spellFilters" class="spell-filters-row" style="display: none;">
+                        <select id="compendiumSpellLevel">
+                            <option value="">All Levels</option>
+                            <option value="0">Cantrip</option>
+                            <option value="1">1st Level</option>
+                            <option value="2">2nd Level</option>
+                            <option value="3">3rd Level</option>
+                            <option value="4">4th Level</option>
+                            <option value="5">5th Level</option>
+                            <option value="6">6th Level</option>
+                            <option value="7">7th Level</option>
+                            <option value="8">8th Level</option>
+                            <option value="9">9th Level</option>
+                        </select>
+                        <select id="compendiumSpellSchool">
+                            <option value="">All Schools</option>
+                            <option value="Abjuration">Abjuration</option>
+                            <option value="Conjuration">Conjuration</option>
+                            <option value="Divination">Divination</option>
+                            <option value="Enchantment">Enchantment</option>
+                            <option value="Evocation">Evocation</option>
+                            <option value="Illusion">Illusion</option>
+                            <option value="Necromancy">Necromancy</option>
+                            <option value="Transmutation">Transmutation</option>
+                        </select>
                     </div>
                 </div>
                 <div id="compendiumResults" class="compendium-results">

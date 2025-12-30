@@ -45,6 +45,16 @@ const Compendium = {
                 this.showWelcome();
             }
         });
+
+        // Spell filters
+        document.getElementById('compendiumSpellLevel')?.addEventListener('change', () => {
+            const query = document.getElementById('compendiumSearch').value;
+            if (query) this.search(query);
+        });
+        document.getElementById('compendiumSpellSchool')?.addEventListener('change', () => {
+            const query = document.getElementById('compendiumSearch').value;
+            if (query) this.search(query);
+        });
     },
 
     switchTab(tab) {
@@ -56,6 +66,12 @@ const Compendium = {
         document.getElementById('compendiumSearch').value = '';
         document.getElementById('compendiumSearch').placeholder =
             tab === 'monsters' ? 'Search monsters... (e.g., dragon, goblin)' : 'Search spells... (e.g., fireball, cure)';
+
+        // Show/hide spell filters
+        const spellFilters = document.getElementById('spellFilters');
+        if (spellFilters) {
+            spellFilters.style.display = tab === 'spells' ? 'flex' : 'none';
+        }
 
         const showFav = document.getElementById('showCompendiumFavorites');
         if (showFav && showFav.checked) {
@@ -127,7 +143,28 @@ const Compendium = {
                     return aName.localeCompare(bName);
                 });
 
-                this.renderResults(sorted.slice(0, 20));
+                // Apply spell filters if on spells tab
+                let filtered = sorted;
+                if (this.currentTab === 'spells') {
+                    const levelFilter = document.getElementById('compendiumSpellLevel')?.value;
+                    const schoolFilter = document.getElementById('compendiumSpellSchool')?.value;
+
+                    if (levelFilter) {
+                        filtered = filtered.filter(s => {
+                            if (levelFilter === '0') return s.level === 'Cantrip' || s.level_int === 0;
+                            return s.level_int === parseInt(levelFilter);
+                        });
+                    }
+                    if (schoolFilter) {
+                        filtered = filtered.filter(s => s.school === schoolFilter);
+                    }
+                }
+
+                if (filtered.length > 0) {
+                    this.renderResults(filtered.slice(0, 20));
+                } else {
+                    this.showNoResults(query);
+                }
             } else {
                 this.showNoResults(query);
             }
