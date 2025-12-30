@@ -74,6 +74,29 @@
     border-color: var(--primary-color);
 }
 
+/* Monster Filter Row */
+.monster-filters-row {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.monster-filters-row select {
+    flex: 1;
+    padding: 10px 14px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.monster-filters-row select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
 /* Search */
 .compendium-search {
     display: flex;

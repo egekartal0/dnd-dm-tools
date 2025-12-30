@@ -53,6 +53,14 @@ const Compendium = {
         document.getElementById('compendiumSpellSchool')?.addEventListener('change', () => {
             this.searchWithFilters();
         });
+
+        // Monster filters - trigger search when changed
+        document.getElementById('compendiumMonsterCR')?.addEventListener('change', () => {
+            this.searchMonstersWithFilters();
+        });
+        document.getElementById('compendiumMonsterType')?.addEventListener('change', () => {
+            this.searchMonstersWithFilters();
+        });
     },
 
     switchTab(tab) {
@@ -69,6 +77,12 @@ const Compendium = {
         const spellFilters = document.getElementById('spellFilters');
         if (spellFilters) {
             spellFilters.style.display = tab === 'spells' ? 'flex' : 'none';
+        }
+
+        // Show/hide monster filters
+        const monsterFilters = document.getElementById('monsterFilters');
+        if (monsterFilters) {
+            monsterFilters.style.display = tab === 'monsters' ? 'flex' : 'none';
         }
 
         const showFav = document.getElementById('showCompendiumFavorites');
@@ -122,6 +136,42 @@ const Compendium = {
             if (query) url += `&search=${encodeURIComponent(query)}`;
             if (levelFilter) url += `&level_int=${levelFilter}`;
             if (schoolFilter) url += `&school=${schoolFilter}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.results && data.results.length > 0) {
+                // Sort alphabetically
+                const sorted = data.results.sort((a, b) => a.name.localeCompare(b.name));
+                this.renderResults(sorted.slice(0, 30));
+            } else {
+                this.showNoResults(query || 'filters');
+            }
+        } catch (error) {
+            console.error('API Error:', error);
+            this.showError();
+        }
+    },
+
+    async searchMonstersWithFilters() {
+        const query = document.getElementById('compendiumSearch')?.value || '';
+        const crFilter = document.getElementById('compendiumMonsterCR')?.value;
+        const typeFilter = document.getElementById('compendiumMonsterType')?.value;
+
+        // If no filters and no query, show welcome
+        if (!query && !crFilter && !typeFilter) {
+            this.showWelcome();
+            return;
+        }
+
+        this.showLoading();
+
+        try {
+            // Build API URL with filters
+            let url = 'https://api.open5e.com/v1/monsters/?limit=50';
+            if (query) url += `&search=${encodeURIComponent(query)}`;
+            if (crFilter) url += `&cr=${crFilter}`;
+            if (typeFilter) url += `&type=${typeFilter}`;
 
             const response = await fetch(url);
             const data = await response.json();
