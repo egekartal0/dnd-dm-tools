@@ -209,18 +209,11 @@ const ShopGenerator = {
 
     generateShop() {
         const shopTypeSelect = document.getElementById('shopType');
-        console.log('Shop type select element:', shopTypeSelect);
-        console.log('Selected value:', shopTypeSelect?.value);
-        console.log('Selected index:', shopTypeSelect?.selectedIndex);
-
         const typeKey = shopTypeSelect?.value || 'general';
-        console.log('Using typeKey:', typeKey);
-
         const shopType = this.shopTypes[typeKey];
-        console.log('Shop type data:', shopType);
 
         if (!shopType) {
-            console.error('Shop type not found for key:', typeKey);
+            showToast('Invalid shop type', 'error');
             return;
         }
 
