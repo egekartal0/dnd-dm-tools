@@ -1,0 +1,21 @@
+{
+  "name": "dnd-dm-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egekartal0/dnd-dm-tools.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/egekartal0/dnd-dm-tools/issues"
+  },
+  "homepage": "https://github.com/egekartal0/dnd-dm-tools#readme"
+}
