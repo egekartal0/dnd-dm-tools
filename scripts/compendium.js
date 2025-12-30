@@ -171,7 +171,7 @@ const Compendium = {
             let url = 'https://api.open5e.com/v1/monsters/?limit=50';
             if (query) url += `&search=${encodeURIComponent(query)}`;
             if (crFilter) url += `&cr=${crFilter}`;
-            if (typeFilter) url += `&type=${typeFilter}`;
+            if (typeFilter) url += `&type__icontains=${typeFilter}`;
 
             const response = await fetch(url);
             const data = await response.json();
