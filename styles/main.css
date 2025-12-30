@@ -439,9 +439,17 @@ select {
 }
 
 select option {
-    background: #1a1a2e;
-    color: #f5f5f5;
+    background: #1a1a2e !important;
+    background-color: #1a1a2e !important;
+    color: #ffffff !important;
     padding: 10px;
+}
+
+/* Make sure select background works */
+select:focus option:checked,
+select option:hover {
+    background: #3a3a5a !important;
+    color: #ffffff !important;
 }
 
 textarea {
